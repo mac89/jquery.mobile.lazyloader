@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+    <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ICanHaz.js/0.10.3/ICanHaz.min.js"></script>
+    <script src="../src/jquery.mobile.lazyloader.js"></script>
+    <script src="sample.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script id="user" type="text/html">
+        <li>
+            <p class="name">Hello I'm {{ name }}</p>
+        </li>
+    </script>
+</head>
+<body>
+<div data-role="page">
+
+    <div data-role="header" data-position="fixed">
+        <h1>Page Title</h1>
+    </div><!-- /header -->
+
+    <div role="main" class="ui-content">
+        <ul id="myListView"></ul>
+        <div id="myProgress" style="position: fixed; top: 50%; left: 50%; display: none">Loading...</div>
+    </div><!-- /content -->
+
+    <div data-role="footer" data-position="fixed">
+        <h4>Page Footer</h4>
+    </div><!-- /footer -->
+</div><!-- /page -->
+</body>
+</html>
