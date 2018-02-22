@@ -154,12 +154,21 @@ const requestHandler = ( request, response ) => {
         const query = querystring.parse( body );
         const retrieved = parseInt( query.retrieved );
         const retrieve = parseInt( query.retrieve );
+        const searchQuery = query.searchQuery.toLowerCase();
+        let filteredUsers;
 
-        // At this point, we have the headers, method, url and body, and can now
-        // do whatever we need to in order to respond to this request.
+        if (searchQuery.length > 0) {
+            // At this point, we have the headers, method, url and body, and can now
+            // do whatever we need to in order to respond to this request.
+            filteredUsers = users.filter( function( user ) {
+                return user.name.toLowerCase().indexOf( searchQuery ) !== -1;
+            } );
+        } else {
+            filteredUsers = users;
+        }
 
         // Get user selection
-        const selection = users.slice( retrieved, retrieved + retrieve );
+        const selection = filteredUsers.slice( retrieved, retrieved + retrieve );
 
         setTimeout( function() {
             response.end( JSON.stringify( { items: selection } ) );

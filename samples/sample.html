@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Lazy loading the Mackenzies</title>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
     <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ICanHaz.js/0.10.3/ICanHaz.min.js"></script>
-    <script src="../src/jquery.mobile.lazyloader.js"></script>
+    <script src="../dist/jquery.mobile.lazyloader-2.0.0.js"></script>
     <script src="sample.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script id="user" type="text/html">
@@ -20,16 +20,19 @@
 <div data-role="page">
 
     <div data-role="header" data-position="fixed">
-        <h1>Page Title</h1>
+        <h1>Lazy loading the Mackenzies</h1>
     </div><!-- /header -->
 
     <div role="main" class="ui-content">
-        <ul id="myListView"></ul>
+        <form>
+            <input title="search" type="text" data-type="search" id="filterable-input" value="J">
+        </form>
+        <ul id="myListView" data-filter="true" data-input="#filterable-input" data-inset="true"></ul>
         <div id="myProgress" style="position: fixed; top: 50%; left: 50%; display: none">Loading...</div>
     </div><!-- /content -->
 
     <div data-role="footer" data-position="fixed">
-        <h4>Page Footer</h4>
+        <h4></h4>
     </div><!-- /footer -->
 </div><!-- /page -->
 </body>

@@ -1,12 +1,29 @@
-### LazyLoader Widget for jQuery Mobile
+## LazyLoader Widget for jQuery Mobile
 
 Lazyloading (i.e. loading the content as it's needed during a scroll of a listview or similar control) is a great way to optimize the performance of any app that contains a list of 50 or more items.  With the LazyLoader Widget for jQuery Mobile, you can easily lazyload any listview without having to write a bunch of custom code to accomplish it.
 
 Note: This is only the client-side part of the lazyloading solution.  It requires a server-side resource that returns a simple JSON formatted string.  Details and examples can be found below. 
 
+### Contents
+
+* [Requirements](#Requirements)
+* [Usage](#Usage)
+  * [Filterable](#Filterable)
+  * [Server request](#Server request)
+  * [Server response](#Server response)
+* [Options](#Options)
+* [Functions](#Functions)
+  * [loadMore](#loadMore)
+  * [reset](#reset)
+* [Events](#Events)
+  * [lazyloaderdoneloading](#lazyloaderdoneloading)
+  * [lazyloaderalldone](#lazyloaderalldone)
+  * [lazyloaderbeforerender](#lazyloaderbeforerender)
+  * [lazyloadererror](#lazyloadererror)
+* [Sample](#Sample)    
+
 ### Requirements
 
-* ECMAScript 6 compliant browser
 * jQuery (Tested with v2.2.4)
 * jQuery Mobile (Tested with v1.4.5)
 * ICanHaz (Tested with v0.10.3)
@@ -21,7 +38,7 @@ Include the following files:
 <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ICanHaz.js/0.10.3/ICanHaz.min.js"></script>
-<script src="src/jquery.mobile.lazyloader.js"></script>
+<script src="dist/jquery.mobile.lazyloader-2.0.0.min.js"></script>
 ```
 
 Include a template in the `<head>`:
@@ -53,15 +70,20 @@ $(function() {
 });
 ```
 
-### Server request
+#### Filterable
+
+If you are using the `filterable` widget in combination with this widget, the default behaviour is changed to filtering server side. The `searchQuery` option is set to the filter input when its content is changed. This will cause the `reset` function with the modified `searchQuery` option to be called. You are responsible for applying the filter server-side.
+
+#### Server request
 
 The request made out to the server will contain the following data:
 
 - __retrieve__: {number} The number of items to be retrieved.
 - __retrieved__: {number} The current number of retrieved items.
 - __reset__: {boolean} Whether or not the server data should be reset.
+- __searchQuery__: {string} The search query to filter with.
 
-### Server response
+#### Server response
 
 The server response is expected to be in a JSON format with the mandatory `items` key that must contain an array of objects, each representing a list item to be rendered. 
 
@@ -121,6 +143,12 @@ The server response is expected to be in a JSON format with the mandatory `items
 		<td>This specifies the number of items that are currently loaded</td>
 	</tr>
 	<tr>
+		<td>searchQuery</td>
+		<td>Empty</td>
+		<td>No</td>
+		<td>The search query that is posted along in the request. Changing this option will trigger the `reset` function.</td>
+	</tr>
+	<tr>
 		<td>ajaxType</td>
 		<td>POST</td>
 		<td>No</td>
@@ -174,6 +202,18 @@ $("#myListView").on("lazyloaderalldone", function ( evt ){ });
 
 - __evt__: {JQuery.Event} The jQuery event.
 
+#### lazyloaderbeforerender
+
+Raised before the loaded items are rendered. This allows you to modify the data before it's rendered in the list.
+
+```JavaScript
+$("#myListView").on("lazyloaderbeforerender", function ( evt, items ){ });
+```
+
+- __evt__: {JQuery.Event} The jQuery event.
+
+- __items__: {Object[]} An array of loaded items.
+
 #### lazyloadererror
 
 Raise when an error occurred with the ajax request or when parsing the result
@@ -196,8 +236,8 @@ $("#myListView").on("lazyloadererror", function ( evt, error ){ });
 	
 ### Sample
 
-Run the following command in a console to start the server:
+Navigate to the `jquery.mobile.lazyloader` directory and run the following command in a console to start the server:
 
-`node server.js`
+`node samples\server\server.js`
 
-Open the `sample.html` page in your browser of choice.
+Open the `samples\sample.html` page in your browser of choice.

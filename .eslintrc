@@ -6,6 +6,17 @@
     "es6": true
   },
   "globals": {
-    "ich": true
+    "ich": true,
+    "QUnit": true,
+    "sinon": true,
+    "$window": true,
+    "widgetName": true,
+    "searchQueryOption": true,
+    "errorEvent": true,
+    "allDoneEvent": true,
+    "doneLoadingEvent": true,
+    "loadTriggerEvents": true,
+    "requestErrorCode": true,
+    "parseResultErrorCode": true
   }
 }
