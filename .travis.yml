@@ -11,4 +11,5 @@ deploy:
   skip_cleanup: "true"
   on:
     repo: mac89/jquery.mobile.lazyloader
-    all_branches: true
+    branch: master
+    tags: true
