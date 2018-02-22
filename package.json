@@ -1,7 +1,11 @@
 {
   "name": "jquery.mobile.lazyloader",
   "version": "2.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "jquery-mobile": "^1.4.0",
+    "icanhaz": "^0.10.3"
+  },
   "devDependencies": {
     "@types/bluebird": "^3.5.20",
     "@types/grunt": "^0.4.22",
@@ -13,15 +17,13 @@
     "eslint": "^4.16.0",
     "eslint-config-jquery": "^1.0.1",
     "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-contrib-uglify-es": "^3.3.0",
     "grunt-eslint": "^20.1.0",
     "grunt-karma": "^2.0.0",
     "grunt-watcher": "^1.0.0",
     "grunt-wrap": "^0.3.1",
-    "icanhaz": "^0.10.3",
-    "jquery": "^2.2.4",
-    "jquery-mobile": "^1.4.0",
     "karma": "^1.7.1",
     "karma-coverage": "^1.1.1",
     "karma-junit-reporter": "^1.2.0",
@@ -32,5 +34,8 @@
     "qunit": "^2.5.0",
     "qunitjs": "^2.4.1",
     "sinon": "^4.2.1"
+  },
+  "scripts": {
+    "test": "karma start --single-run --browsers PhantomJS"
   }
 }
