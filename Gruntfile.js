@@ -61,15 +61,21 @@ module.exports = function( grunt ) {
                     spawn: true
                 }
             }
+        },
+        coveralls: {
+            options: {
+                coverageDir: "coverage",
+                recursive: true
+          }
         }
-
     } );
 
+    grunt.loadNpmTasks( "grunt-karma-coveralls" );
     grunt.loadNpmTasks( "grunt-wrap" );
     grunt.loadNpmTasks( "grunt-karma" );
     grunt.loadNpmTasks( "grunt-watcher" );
     grunt.loadNpmTasks( "grunt-contrib-uglify-es" );
     grunt.loadNpmTasks( "grunt-contrib-concat" );
-    grunt.registerTask( "dev", [ "eslint", "karma" ] );
+    grunt.registerTask( "dev", [ "eslint", "karma", "coveralls" ] );
     grunt.registerTask( "dist", [ "concat:dist", "wrap:dist", "uglify" ] );
 };
