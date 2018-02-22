@@ -1,11 +1,15 @@
 ## LazyLoader Widget for jQuery Mobile
 
+Lazyloading (i.e. loading the content as it's needed during a scroll of a listview or similar control) is a great way 
+to optimize the performance of any app that contains a list of 50 or more items.  With the LazyLoader Widget for jQuery 
+Mobile, you can easily lazyload any listview without having to write a bunch of custom code to accomplish it.
+
+Note: This is only the client-side part of the lazyloading solution.  It requires a server-side resource that returns a 
+simple JSON formatted string.  Details and examples can be found below. 
+
 [![Build Status](https://travis-ci.org/mac89/jquery.mobile.lazyloader.svg?branch=v2.0.0)](https://travis-ci.org/mac89/jquery.mobile.lazyloader)
 [![Coverage Status](https://coveralls.io/repos/github/mac89/jquery.mobile.lazyloader/badge.svg?branch=v2.0.0)](https://coveralls.io/github/mac89/jquery.mobile.lazyloader?branch=v2.0.0)
-
-Lazyloading (i.e. loading the content as it's needed during a scroll of a listview or similar control) is a great way to optimize the performance of any app that contains a list of 50 or more items.  With the LazyLoader Widget for jQuery Mobile, you can easily lazyload any listview without having to write a bunch of custom code to accomplish it.
-
-Note: This is only the client-side part of the lazyloading solution.  It requires a server-side resource that returns a simple JSON formatted string.  Details and examples can be found below. 
+[![npm version](https://badge.fury.io/js/jquery.mobile.lazyloader.svg)](https://badge.fury.io/js/jquery.mobile.lazyloader)
 
 ### Contents
 
