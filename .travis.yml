@@ -1,3 +1,14 @@
 language: node_js
 node_js:
-  - "5"
+- '5'
+before_deploy: "grunt dist"
+deploy:
+  provider: releases
+  api_key:
+    secure: mobW3qI1QOMN6dZSbQRP3rUkEp3WnoUuaWL+Xwcmtb5Y8brV4ecVUG2/vUs3JP4dnAoPu/Pwo0TJ/3uK0r0sNjFdGnGCRAAPAjdJyPBoPFOGjvp4cO2Gt6qnHexE62getW84ZZwMj+DjUji1D4/uIlkzejuCVl5RIM/3iWTuQUMw5Byi71a4jK3F4lyu4ISsv7DhwyEnSfQadx7BPsLP1+jzfVTnMJcMNCER0XsESfmhnG2+xT8nJciyeGMnzUVM7A+HMD0Lu7DeCWk/7awkrG+OphQ8mYa7TPBRziwZw+rJiM6+E/P3+nWjOyneov58KTJ/3DrFMjSaqvftcUbAu2ItERGzuJWib8+LyB55TtHQdnwxPrVMtrNXjQL+73Oz535x2HcoFNu+KzlNzGLo2o5RHi4yRUuVPSNLDpRgj4R7/peJd0DIwY+QSFn5tRgUXZAnga8j/Y6dncRJEwTdWnGDiBgCzzOPnIDL96TbSRLgkIOr9TY4Y4zI9nOw74IIo2/UB0tcKXHBxrkFclFdnwc0zbjU+F5E4oo11KA/Dl3NBsqYY5el43aj+Uy96b9ue9F5ky8d9tc+0rP9O3Cs2oX7DdXOduqp6cop95miV+ZYU0A3VYGvee2ATkwvHBT3Ys/d4WroyBHWohkmP0+OH+7VY9Q7PE4UEyAzwDwVIrI=
+  file: dist/*
+  file_glob: true
+  skip_cleanup: "true"
+  on:
+    repo: mac89/jquery.mobile.lazyloader
+    all_branches: true
