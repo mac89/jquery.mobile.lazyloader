@@ -107,12 +107,12 @@ The server response is expected to be in a JSON format with the mandatory `items
 	<tr>
 	<th>Option</th><th>Default</th><th>Required</th><th>Purpose</th>
 	</tr>
-		<tr>
-    		<td>url</td>
-    		<td>Empty</td>
-    		<td>Yes</td>
-    		<td>This specifies the URL of the server-side resource to which the AJAX post should be sent.</td>
-    	</tr>
+	<tr>
+		<td>url</td>
+		<td>Empty</td>
+		<td>Yes</td>
+		<td>This specifies the URL of the server-side resource to which the AJAX post should be sent.</td>
+	</tr>
 	<tr>
 		<td>templateId</td>
 		<td>Empty</td>
@@ -160,6 +160,12 @@ The server response is expected to be in a JSON format with the mandatory `items
 		<td>POST</td>
 		<td>No</td>
 		<td>The ajax request type. Can be either GET or POST.</td>
+	</tr>
+	<tr>
+		<td>postData</td>
+		<td>Empty</td>
+		<td>No</td>
+		<td>Additional data to be sent in the requests.</td>
 	</tr>
 </table>
 
