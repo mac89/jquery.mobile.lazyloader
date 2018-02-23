@@ -39,7 +39,12 @@ simple JSON formatted string.  Details and examples can be found below.
 ### Install
 
 ```npm
-npm install --save jquery.mobile.lazyloader
+$ npm install --save jquery.mobile.lazyloader
+```
+
+Run the following grunt command in case the `dist` directory doesn't exist:
+```
+$ grunt dist
 ```
 
 ### Usage

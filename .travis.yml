@@ -16,9 +16,8 @@ deploy:
   file_glob: true
   skip_cleanup: 'true'
   on:
-    branch: v2.0.0
-#    branch: master
-#    tags: true
+    branch: master
+    tags: true
 - provider: npm
   email: mac89@hotmail.com
   api_key:
