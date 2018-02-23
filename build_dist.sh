@@ -8,10 +8,6 @@ set -e #Set errors to fail explicitly
   grunt dist
 
   # initialize and commit everything in pages
-  cd dist
-  git init
-  git fetch
-  git checkout v2.0.0
   git config user.name "Travis"
   git config user.email "Travis"
   git add .
