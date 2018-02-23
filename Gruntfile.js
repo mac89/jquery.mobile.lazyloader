@@ -10,7 +10,7 @@ module.exports = function( grunt ) {
         concat: {
             dist: {
                 src: [ "src/*.js" ],
-                dest: "dist/<%= pkg.name %>-<%= pkg.version %>.js",
+                dest: "dist/<%= pkg.name %>.js",
                 nonull: true,
                 options: {
 
@@ -25,8 +25,8 @@ module.exports = function( grunt ) {
         },
         wrap: {
             dist: {
-                src: [ "dist/<%= pkg.name %>-<%= pkg.version %>.js" ],
-                dest: "dist/<%= pkg.name %>-<%= pkg.version %>.js",
+                src: [ "dist/<%= pkg.name %>.js" ],
+                dest: "dist/<%= pkg.name %>.js",
                 options: {
                     wrapper: [ "( function( $, window ) {\n", "\n} )( jQuery, window );\n" ]
                 }
@@ -44,7 +44,7 @@ module.exports = function( grunt ) {
                     reserved: [ "jQuery" ]
                 },
                 files: {
-                    "dist/<%= pkg.name %>-<%= pkg.version %>.min.js": [ "dist/*.js" ]
+                    "dist/<%= pkg.name %>.min.js": [ "dist/*.js" ]
                 }
             }
         },

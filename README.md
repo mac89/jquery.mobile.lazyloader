@@ -7,27 +7,27 @@ Mobile, you can easily lazyload any listview without having to write a bunch of 
 Note: This is only the client-side part of the lazyloading solution.  It requires a server-side resource that returns a 
 simple JSON formatted string.  Details and examples can be found below. 
 
-[![Build Status](https://travis-ci.org/mac89/jquery.mobile.lazyloader.svg?branch=v2.0.0)](https://travis-ci.org/mac89/jquery.mobile.lazyloader)
-[![Coverage Status](https://coveralls.io/repos/github/mac89/jquery.mobile.lazyloader/badge.svg?branch=v2.0.0)](https://coveralls.io/github/mac89/jquery.mobile.lazyloader?branch=v2.0.0)
+[![Build Status](https://travis-ci.org/mac89/jquery.mobile.lazyloader.svg?branch=master)](https://travis-ci.org/mac89/jquery.mobile.lazyloader)
+[![Coverage Status](https://coveralls.io/repos/github/mac89/jquery.mobile.lazyloader/badge.svg?branch=master)](https://coveralls.io/github/mac89/jquery.mobile.lazyloader?branch=master)
 [![npm version](https://badge.fury.io/js/jquery.mobile.lazyloader.svg)](https://badge.fury.io/js/jquery.mobile.lazyloader)
 
 ### Contents
 
-* [Requirements](#Requirements)
-* [Usage](#Usage)
-  * [Filterable](#Filterable)
-  * [Server request](#Server-request)
-  * [Server response](#Server-response)
-* [Options](#Options)
-* [Functions](#Functions)
-  * [loadMore](#loadMore)
+* [Requirements](#requirements)
+* [Usage](#usage)
+  * [Filterable](#filterable)
+  * [Server request](#server-request)
+  * [Server response](#server-response)
+* [Options](#options)
+* [Functions](#functions)
+  * [loadMore](#loadmore)
   * [reset](#reset)
-* [Events](#Events)
+* [Events](#events)
   * [lazyloaderdoneloading](#lazyloaderdoneloading)
   * [lazyloaderalldone](#lazyloaderalldone)
   * [lazyloaderbeforerender](#lazyloaderbeforerender)
   * [lazyloadererror](#lazyloadererror)
-* [Sample](#Sample)    
+* [Sample](#sample)    
 
 ### Requirements
 
@@ -36,16 +36,22 @@ simple JSON formatted string.  Details and examples can be found below.
 * ICanHaz (Tested with v0.10.3)
 * Server-side code to handle the AJAX requests
 
+### Install
+
+```npm
+npm install --save jquery.mobile.lazyloader
+```
+
 ### Usage
 
 Include the following files:
 
 ```html
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
-<script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ICanHaz.js/0.10.3/ICanHaz.min.js"></script>
-<script src="dist/jquery.mobile.lazyloader-2.0.0.min.js"></script>
+<link rel="stylesheet" href="node_modules/jquery-mobile/dist/jquery.mobile.min.css"/>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="node_modules/jquery-mobile/dist/jquery.mobile.min.js"></script>
+<script src="node_modules/icanhaz/ICanHaz.min.js"></script>
+<script src="node_modules/jquery.mobile.lazyloader/dist/jquery.mobile.lazyloader.min.js"></script>
 ```
 
 Include a template in the `<head>`:
