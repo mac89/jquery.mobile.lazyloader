@@ -3,7 +3,7 @@ node_js:
 - '5'
 env:
   global:
-    - GH_REF: "github.com/mac89/jquery.mobile.lazyloader"
+    - GH_REF: "github.com/dualinventive/jquery.mobile.lazyloader"
     - secure: qwr5R6OmLYChY83po2GeA/7w9BMztFW0QuaocF4d88QXlID7VSqrgknU2knJaxPWEQDzHJjHntM2wOtUc2desV1pUa9NM+uc+Wl/z1fIr3Ognn375DHBlYGQImHT+WsVvBXr8RoTTf/1I0ZmrpIEfyIoAVhBIMZA7tjN4Eu3+rKEkRw/rdvQvZh8BFbMNu/c4lvY/KkEoFpVjM63YmXmldZHitGH1tArsa2xgAGoBntcmzw8UYKzj6I3kA6DUina5XLthgK//wvPU5OpiiJou+5VczXcKAhSKkWbqIOWycD6WN+vwOhZJZItwRzbBaTprYFJMaN6GGZ20sHKp+7XGW5W6iW4snntL3nCnGjUkyhfhO8X9ACVrdpsbqEuyGVmyhDVOlw/mjWnIq1pk0XkaVERyV+c/jwEGttKbLBmS3XvSi1Qnm+hon7yU9bogiRWE0847hMLbKZJJ9GfGygjAkppDAzTbRqmEgbk4NeonS0AYmUxS2tMy+jZFCq3HvK3JYZDv+yi7MEmWPCC1f+ieY1aM6REaKYr0ESPBbDhbeb9JEbB8PcjeNaT2rMlSwsCNTHvXWj7WuWoAp9YBbNJeA9htt3eejKd2NYa3389ZtLs+12Fe+wuIy6Ji+WLoXGkvyhpzxloD4gfv5VfIaBX/G4WUqTxCsXEWCjqR+t0hpM=
 before_deploy:
  - chmod +x build_dist.sh
