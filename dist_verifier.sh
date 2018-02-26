@@ -7,14 +7,11 @@ grunt dev
 # build dist
 grunt dist
 
-gitdiff=$(git diff-index --quiet HEAD -- dist/)
-
-echo "${gitdiff}"
-if git diff-index --quiet HEAD -- dist/; then
-	echo "Distribution files successfully validated."
-    # No changes
-else
+if [[ `git status --porcelain dist/` ]]; then
     # Changes
     echo "ERROR: Distribution files were not generated properly. Please run the 'grunt dist' command and commit the files in the 'dist' directory."
     exit 1;
+else
+	# No changes
+	echo "Distribution files successfully validated."
 fi
