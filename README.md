@@ -7,8 +7,8 @@ Mobile, you can easily lazyload any listview without having to write a bunch of 
 Note: This is only the client-side part of the lazyloading solution.  It requires a server-side resource that returns a 
 simple JSON formatted string.  Details and examples can be found below. 
 
-[![Build Status](https://travis-ci.org/mac89/jquery.mobile.lazyloader.svg?branch=master)](https://travis-ci.org/mac89/jquery.mobile.lazyloader)
-[![Coverage Status](https://coveralls.io/repos/github/mac89/jquery.mobile.lazyloader/badge.svg?branch=master)](https://coveralls.io/github/mac89/jquery.mobile.lazyloader?branch=master)
+[![Build Status](https://travis-ci.org/dualinventive/jquery.mobile.lazyloader.svg?branch=master)](https://travis-ci.org/dualinventive/jquery.mobile.lazyloader)
+[![Coverage Status](https://coveralls.io/repos/github/dualinventive/jquery.mobile.lazyloader/badge.svg?branch=master)](https://coveralls.io/github/dualinventive/jquery.mobile.lazyloader?branch=master)
 [![npm version](https://badge.fury.io/js/jquery.mobile.lazyloader.svg)](https://badge.fury.io/js/jquery.mobile.lazyloader)
 
 ### Contents
