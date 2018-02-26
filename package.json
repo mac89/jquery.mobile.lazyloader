@@ -37,6 +37,6 @@
     "sinon": "^4.2.1"
   },
   "scripts": {
-    "test": "./build_dist.sh"
+    "test": "./dist_verifier.sh"
   }
 }
