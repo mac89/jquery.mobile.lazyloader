@@ -7,8 +7,9 @@ grunt dev
 # build dist
 grunt dist
 
-echo git diff-index --quiet HEAD -- dist/
+gitdiff=$(git diff-index --quiet HEAD -- dist/)
 
+echo "${gitdiff}"
 if git diff-index --quiet HEAD -- dist/; then
 	echo "Distribution files successfully validated."
     # No changes
