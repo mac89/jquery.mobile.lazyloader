@@ -1,28 +1,24 @@
 language: node_js
 node_js:
 - '5'
-env:
-  global:
-    - GH_REF: "github.com/dualinventive/jquery.mobile.lazyloader"
-    - secure: qwr5R6OmLYChY83po2GeA/7w9BMztFW0QuaocF4d88QXlID7VSqrgknU2knJaxPWEQDzHJjHntM2wOtUc2desV1pUa9NM+uc+Wl/z1fIr3Ognn375DHBlYGQImHT+WsVvBXr8RoTTf/1I0ZmrpIEfyIoAVhBIMZA7tjN4Eu3+rKEkRw/rdvQvZh8BFbMNu/c4lvY/KkEoFpVjM63YmXmldZHitGH1tArsa2xgAGoBntcmzw8UYKzj6I3kA6DUina5XLthgK//wvPU5OpiiJou+5VczXcKAhSKkWbqIOWycD6WN+vwOhZJZItwRzbBaTprYFJMaN6GGZ20sHKp+7XGW5W6iW4snntL3nCnGjUkyhfhO8X9ACVrdpsbqEuyGVmyhDVOlw/mjWnIq1pk0XkaVERyV+c/jwEGttKbLBmS3XvSi1Qnm+hon7yU9bogiRWE0847hMLbKZJJ9GfGygjAkppDAzTbRqmEgbk4NeonS0AYmUxS2tMy+jZFCq3HvK3JYZDv+yi7MEmWPCC1f+ieY1aM6REaKYr0ESPBbDhbeb9JEbB8PcjeNaT2rMlSwsCNTHvXWj7WuWoAp9YBbNJeA9htt3eejKd2NYa3389ZtLs+12Fe+wuIy6Ji+WLoXGkvyhpzxloD4gfv5VfIaBX/G4WUqTxCsXEWCjqR+t0hpM=
 script:
- - chmod +x dist_verifier.sh
+- chmod +x dist_verifier.sh
  - ./dist_verifier.sh
 deploy:
-- provider: releases
-  api_key:
-    secure: mobW3qI1QOMN6dZSbQRP3rUkEp3WnoUuaWL+Xwcmtb5Y8brV4ecVUG2/vUs3JP4dnAoPu/Pwo0TJ/3uK0r0sNjFdGnGCRAAPAjdJyPBoPFOGjvp4cO2Gt6qnHexE62getW84ZZwMj+DjUji1D4/uIlkzejuCVl5RIM/3iWTuQUMw5Byi71a4jK3F4lyu4ISsv7DhwyEnSfQadx7BPsLP1+jzfVTnMJcMNCER0XsESfmhnG2+xT8nJciyeGMnzUVM7A+HMD0Lu7DeCWk/7awkrG+OphQ8mYa7TPBRziwZw+rJiM6+E/P3+nWjOyneov58KTJ/3DrFMjSaqvftcUbAu2ItERGzuJWib8+LyB55TtHQdnwxPrVMtrNXjQL+73Oz535x2HcoFNu+KzlNzGLo2o5RHi4yRUuVPSNLDpRgj4R7/peJd0DIwY+QSFn5tRgUXZAnga8j/Y6dncRJEwTdWnGDiBgCzzOPnIDL96TbSRLgkIOr9TY4Y4zI9nOw74IIo2/UB0tcKXHBxrkFclFdnwc0zbjU+F5E4oo11KA/Dl3NBsqYY5el43aj+Uy96b9ue9F5ky8d9tc+0rP9O3Cs2oX7DdXOduqp6cop95miV+ZYU0A3VYGvee2ATkwvHBT3Ys/d4WroyBHWohkmP0+OH+7VY9Q7PE4UEyAzwDwVIrI=
-  file: dist/*
-  file_glob: true
-  skip_cleanup: 'true'
-  on:
-    branch: master
-    tags: true
-- provider: npm
-  email: mac89@hotmail.com
-  api_key:
-    secure: MX+hUZ6VAvtAfmwktbSgG6U+qaQcX0qeKhRg0kSRamrlPvMPTg5d6FqDeIGk0w6j5r8M4QbhWiHVrr0lWGL9hcjptlfqbTo9Pyoo+A2Oyvp2De82nv6wSNCgS/DG6vIM+CN+dqbmGu+w+xGp23AtGnY6j3DFFP/Lv41SJJkAmK1nG1E1gd6BSk/7V0JpIAmR9NpRFuJsN+V8MVIKkZH+6kqjQp36ZipQVg3XksJg7RMAAF+BY4qZboAkza8t0MgYmJ7Yb8SZ6b9lPvClqD/6/mT0bDPxRmG35v24fDy/qBbkq0XriO0xa1qo/lo9BFgwWabR9/71HSBQhOBI2Qi4DYkBy/lfwlwxPuy4ljYyJvoZcIy6mDZtd9RMpOJM6Rjf/z2G7Fjol0eIZ0PDbhWv1b8PuDXjIv6rkQD+lRLEw8yRPiNVjfPBc/7rsKBL2uexVu3+8J96mZXudDzi7MNYNbr2T/rBgNTNtS12Isu5ST2k5vDJgQ/GmO+x1iLGLWzCrCBX1Ma5b2GuvjsyS1tEAqmRLCpVjiUDA7qxMn7qZInhwmMINCdIC5ge6ic3dz1eKbQIfzbrRvqCFoZYFp/yL6q8LjZ1c+cnjuszI5095ZvJ9SltsMZdAOQb4OcA78EMddRe5v3+4pogeBpG9oizSVUHtDeyAfKWLDRV0EFc5jc=
-  skip_cleanup: 'true'
-  on:
-    branch: master
-    tags: true
+  - provider: releases
+    api_key:
+      secure: mobW3qI1QOMN6dZSbQRP3rUkEp3WnoUuaWL+Xwcmtb5Y8brV4ecVUG2/vUs3JP4dnAoPu/Pwo0TJ/3uK0r0sNjFdGnGCRAAPAjdJyPBoPFOGjvp4cO2Gt6qnHexE62getW84ZZwMj+DjUji1D4/uIlkzejuCVl5RIM/3iWTuQUMw5Byi71a4jK3F4lyu4ISsv7DhwyEnSfQadx7BPsLP1+jzfVTnMJcMNCER0XsESfmhnG2+xT8nJciyeGMnzUVM7A+HMD0Lu7DeCWk/7awkrG+OphQ8mYa7TPBRziwZw+rJiM6+E/P3+nWjOyneov58KTJ/3DrFMjSaqvftcUbAu2ItERGzuJWib8+LyB55TtHQdnwxPrVMtrNXjQL+73Oz535x2HcoFNu+KzlNzGLo2o5RHi4yRUuVPSNLDpRgj4R7/peJd0DIwY+QSFn5tRgUXZAnga8j/Y6dncRJEwTdWnGDiBgCzzOPnIDL96TbSRLgkIOr9TY4Y4zI9nOw74IIo2/UB0tcKXHBxrkFclFdnwc0zbjU+F5E4oo11KA/Dl3NBsqYY5el43aj+Uy96b9ue9F5ky8d9tc+0rP9O3Cs2oX7DdXOduqp6cop95miV+ZYU0A3VYGvee2ATkwvHBT3Ys/d4WroyBHWohkmP0+OH+7VY9Q7PE4UEyAzwDwVIrI=
+    file: dist/*
+    file_glob: true
+    skip_cleanup: 'true'
+    on:
+      branch: master
+      tags: true
+  - provider: npm
+    api_key:
+        secure: Ef/+cTKV1OHTYrl+87PoRKQO689fMpR2fbRCWs0xBktcSqmaz95aSz4aAgilh6z2yLDuJpJ2/1+Zo9W1zGkvPZP6HkYKiaXJnaovIQkaKvL/1FMxVgRbUkE0VWeSXZV05Zcl/gpiVfnqhIPzoDwTXKtyEwqtKIaOO0nIT4eIxbr+EY6H1OMqED8sSPGoHTEj5Qx0BMaZINGZP8XTWYz7X0OiIVpu7XRyPRbr/ldm2VZzQviAUZXd7Mioo3WSy0Xe1ruIhBz6teKzndQzWkUJKTtCGfw9ani20HEOs4jb8wqNo7KHOcMOYCIV6QLWLXoTm6GnwuAxpUNqZswjL+K5aQ8lPzp8wJ/Pm8PgBICb7aSWRuP82aYnQ7hPKQV15A0CLICNvJasKd3pnq6IHDS70YcNrPklEXaxYvnrW4QBT+IgSRxkSIZOppLgEUbrh9krwdpzFjbz55XYj85wCgLIOUcyQJ4oLFK2LV1CItbzw4a5vRiMzMWINlyXG2uFSrVOUVO3M3geasZTZuE8RU3fuKg9SO8qM55reJUNK/Ut+dC43qoiwdHGnyxlPCTTfIjsMDrCcIJ2oqvPZX92+O5uBNi0S7Jg5aVltMw3Ox6Ofm3IdsBHoySSaejgIT+9m5PT2LfcllJkl0xhJOhplGImJYe970V0Usmz4vifwlfJq4I=
+    email: mac89@hotmail.com
+    skip_cleanup: 'true'
+    on:
+      branch: master
+      tags: true
