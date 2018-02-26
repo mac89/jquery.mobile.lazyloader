@@ -35,8 +35,5 @@
     "qunit": "^2.5.0",
     "qunitjs": "^2.4.1",
     "sinon": "^4.2.1"
-  },
-  "scripts": {
-    "test": "./dist_verifier.sh"
   }
 }
