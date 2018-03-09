@@ -3,3 +3,4 @@
 .idea
 /coverage
 .coveralls.yml
+karma-results.xml

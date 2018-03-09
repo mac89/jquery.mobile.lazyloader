@@ -99,7 +99,7 @@ The request made out to the server will contain the following data:
 - __retrieve__: {number} The number of items to be retrieved.
 - __retrieved__: {number} The current number of retrieved items.
 - __reset__: {boolean} Whether or not the server data should be reset.
-- __searchQuery__: {string} The search query to filter with.
+- __searchQuery__: {string|null} The search query to filter with.
 
 #### Server response
 
