@@ -28,9 +28,9 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
     /**
      * The search query that is posted in the request.
-     * @type {string}
+     * @type {string|null}
      */
-    searchQuery: "",
+    searchQuery: null,
 
     /**
      * This is the number of items retrieved so far.

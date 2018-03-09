@@ -43,13 +43,9 @@ module.exports = function( grunt ) {
         mangle: {
           reserved: [ "jQuery" ]
         },
-        files: [
-          {
-            expand: true,
-            src: [ "dist/<%= pkg.name %>.min.js" ],
-            dest: ""
-          }
-        ]
+        files: {
+          "dist/<%= pkg.name %>.min.js": [ "dist/<%= pkg.name %>.js" ]
+        }
       }
     },
     karma: {
