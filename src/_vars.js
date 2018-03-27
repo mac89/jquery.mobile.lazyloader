@@ -53,4 +53,11 @@ var $window = $( window ),
    * The error code that is provided in the event when parsing of a response fails
    * @type {number}
    */
-  parseResultErrorCode = 2;
+  parseResultErrorCode = 2,
+
+  /**
+   * Indicates the event should be ignored. The value is determined by $.mobile.hideUrlBar and when
+   * it is true a programmatic scroll is done.
+   * @type {boolean}
+   */
+  ignoreEvent = $.mobile.hideUrlBar;
