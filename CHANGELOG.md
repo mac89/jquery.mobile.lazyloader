@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.3] - 2018-03-27
+### Fixed
+- \#5: Fixed an issue that caused the plugin to possibly send an unnecessary request if the `$.mobile.hideUrlBar` JQM setting was set to `true`.
+- Fixed incorrect url to the plugin within the `sample.html`.
+
 ## [2.0.2] - 2018-03-09
 ### Fixed
 - \#3: Corrected an issue that caused the plugin not to load items on initialization if the `filter` option was set to `true` 

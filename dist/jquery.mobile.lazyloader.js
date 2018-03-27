@@ -58,7 +58,14 @@ var $window = $( window ),
    * The error code that is provided in the event when parsing of a response fails
    * @type {number}
    */
-  parseResultErrorCode = 2;
+  parseResultErrorCode = 2,
+
+  /**
+   * Indicates the event should be ignored. The value is determined by $.mobile.hideUrlBar and when
+   * it is true a programmatic scroll is done.
+   * @type {boolean}
+   */
+  ignoreEvent = $.mobile.hideUrlBar;
 
 // Source: src/filterable.js
 var filterableWidget = $.mobile.filterable,
@@ -103,6 +110,15 @@ if ( filterableWidget ) {
 }
 
 // Source: src/lazyloader.js
+// Check if the first scroll event should be ignored
+if ( ignoreEvent ) {
+
+  // It should be ignored so listen to the first scroll event to toggle the boolean
+  $window.one( "scrollstart", function() {
+    ignoreEvent = false;
+  } );
+}
+
 $.widget( "mobile." + widgetName, $.mobile.listview, {
   options: {
 
@@ -256,7 +272,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
         // Check if the page scroll location is close to the bottom
         if ( self.element.height() - options.threshold <=
-             $window.scrollTop() + $window.height() ) {
+          $window.scrollTop() + $window.height() ) {
 
           // Get the progress element
           $( options.$progress ).show();
@@ -405,8 +421,9 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
   _handleEvent: function() {
     var self = this;
 
-    // Check if the listview is visible and an event has not triggered a load already
-    if ( !self._eventTriggered && self.element.is( ":visible" ) ) {
+    // Check if the listview is visible and an event has not triggered a load already or if it
+    // should be ignored
+    if ( !self._eventTriggered && !ignoreEvent && self.element.is( ":visible" ) ) {
 
       // Block other events from triggering a load
       self._eventTriggered = true;
