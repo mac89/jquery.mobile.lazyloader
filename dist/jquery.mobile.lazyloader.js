@@ -185,7 +185,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
     // Get any user defined settings and extend / merge / override them with
     // defaultSettings
-    this.options = $.extend( this.defaults, this.options );
+    this.options = $.extend( {}, this.defaults, this.options );
 
     // Add event listeners
     $window.on(
