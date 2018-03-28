@@ -10,11 +10,12 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       return result;
     } );
 
-        this.$scrollContainer =
-      $( "<div style='overflow: scroll'></div>" ).appendTo( $qunitFixture ); this.$list = $( "<ul id=\"myListView\"></ul>" ).appendTo( this.$scrollContainer );
-        this.$progress = $( "<div id=\"myProgress\"></div>" ).appendTo( $qunitFixture );
-        $( "<script id=\"user\" type=\"text/html\"><li>{{ name }}</li></script >" )
-            .appendTo( $qunitFixture );
+    this.$scrollContainer =
+      $( "<div style='overflow: scroll'></div>" ).appendTo( $qunitFixture );
+    this.$list = $( "<ul id=\"myListView\"></ul>" ).appendTo( this.$scrollContainer );
+    this.$progress = $( "<div id=\"myProgress\"></div>" ).appendTo( $qunitFixture );
+    $( "<script id=\"user\" type=\"text/html\"><li>{{ name }}</li></script >" )
+      .appendTo( $qunitFixture );
 
     this.windowId = "myWindow";
 
@@ -40,17 +41,18 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         type: "POST"
       };
 
-        var options = {
-            url: url,
-            templateId: templateId,
-            $progress: $progress,
-            retrieved: retrieved,
-            retrieve: retrieve,
-            eventTimeout: eventTimeout,
-            postData: postData,
-            threshold: threshold,
-            ajaxType: ajaxType,
-        ajaxSettings: ajaxSettings };
+    var options = {
+      url: url,
+      templateId: templateId,
+      $progress: $progress,
+      retrieved: retrieved,
+      retrieve: retrieve,
+      eventTimeout: eventTimeout,
+      postData: postData,
+      threshold: threshold,
+      ajaxType: ajaxType,
+      ajaxSettings: ajaxSettings
+    };
 
     var loadStub = this.sandbox.stub( $.mobile.lazyloader.prototype, "_load" );
 
@@ -139,28 +141,28 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     assert.ok( this.ajaxStub.notCalled );
   } );
 
-    QUnit.test( "_load: Test threshold is not exceeded", function( assert ) {
-        var
-            listHeight = 400,
-            windowHeight = 300,
-            threshold = 49,
-            windowScrollTop = 50;
+  QUnit.test( "_load: Test threshold is not exceeded", function( assert ) {
+    var
+      listHeight = 400,
+      windowHeight = 300,
+      threshold = 49,
+      windowScrollTop = 50;
 
     var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
     var doneloadingSpy = sinon.spy();
 
-        this.$scrollContainer.height( windowHeight );
-    this.$list.height( listHeight ); this.$list.lazyloader( { threshold: threshold } )
-            .on( "lazyloaderdoneloading", doneloadingSpy );
+    this.$scrollContainer.height( windowHeight );
+    this.$list.height( listHeight );
+    this.$list.lazyloader( { threshold: threshold } )
+      .on( "lazyloaderdoneloading", doneloadingSpy );
 
     _loadStub.restore();
 
     var data = this.$list.data()[ "mobile-lazyloader" ];
     data._eventTriggered = true;
 
-
-        this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
+    this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
 
     data._load();
 
@@ -171,17 +173,17 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     assert.notOk( data._eventTriggered );
   } );
 
-    QUnit.test( "_load: Test threshold is exceeded and the ajax request fails", function( assert ) {
-        var
-            listHeight = 400,
-            windowHeight = 300,
-            threshold = 50,
-            windowScrollTop = 50,
-            url = "http://localhost:3000",
-            retrieved = 30,
-            retrieve = 40,
-            postData = { additionalData: "hello" },
-            ajaxType = "GET",
+  QUnit.test( "_load: Test threshold is exceeded and the ajax request fails", function( assert ) {
+    var
+      listHeight = 400,
+      windowHeight = 300,
+      threshold = 50,
+      windowScrollTop = 50,
+      url = "http://localhost:3000",
+      retrieved = 30,
+      retrieve = 40,
+      postData = { additionalData: "hello" },
+      ajaxType = "GET",
       ajaxSettings = {
         global: false,
         type: "POST"
@@ -189,28 +191,29 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     this.$progress.hide();
 
-        this.$scrollContainer.height( windowHeight );
-    this.$list.height( listHeight ); var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
+    this.$scrollContainer.height( windowHeight );
+    this.$list.height( listHeight );
+    var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
     var errorSpy = sinon.spy();
 
-        this.$list.lazyloader( {
-            url: url,
-            $progress: this.$progress,
-            retrieved: retrieved,
-            retrieve: retrieve,
-            postData: postData,
-            threshold: threshold,
-            ajaxType: ajaxType,
-        ajaxSettings: ajaxSettings } ).on( "lazyloadererror", errorSpy );
+    this.$list.lazyloader( {
+      url: url,
+      $progress: this.$progress,
+      retrieved: retrieved,
+      retrieve: retrieve,
+      postData: postData,
+      threshold: threshold,
+      ajaxType: ajaxType,
+      ajaxSettings: ajaxSettings
+    } ).on( "lazyloadererror", errorSpy );
 
     _loadStub.restore();
 
     var data = this.$list.data()[ "mobile-lazyloader" ];
     data._eventTriggered = true;
 
-
-        this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
+    this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
 
     data._load();
 
@@ -226,17 +229,18 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     // To return failed ajax call (having used .reject() )
     call.reject( errorData );
 
-        assert.ok(
-            this.ajaxStub.calledWithExactly( url, sinon.match( {
-                type: ajaxSettings.type,
-                data: {
-                    retrieved: retrieved,
-                    retrieve: retrieve,
-                    reset: false,
-                    additionalData: postData.additionalData
-                },
-                dataType: "json",
-            global: ajaxSettings.global } ) ) );
+    assert.ok(
+      this.ajaxStub.calledWithExactly( url, sinon.match( {
+        type: ajaxSettings.type,
+        data: {
+          retrieved: retrieved,
+          retrieve: retrieve,
+          reset: false,
+          additionalData: postData.additionalData
+        },
+        dataType: "json",
+        global: ajaxSettings.global
+      } ) ) );
 
     assert.ok( errorSpy.calledWithExactly(
       sinon.match.object,
@@ -246,19 +250,19 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     assert.notOk( data._eventTriggered );
   } );
 
-    QUnit.test(
-        "_load: Test threshold is exceeded and the ajax request succeeds, but the parsing fails",
-        function( assert ) {
-            var
-                listHeight = 400,
-                windowHeight = 300,
-                threshold = 50,
-                windowScrollTop = 50,
-                url = "http://localhost:3000",
-                retrieved = 30,
-                retrieve = 40,
-                postData = { additionalData: "hello" },
-                ajaxType = "GET",
+  QUnit.test(
+    "_load: Test threshold is exceeded and the ajax request succeeds, but the parsing fails",
+    function( assert ) {
+      var
+        listHeight = 400,
+        windowHeight = 300,
+        threshold = 50,
+        windowScrollTop = 50,
+        url = "http://localhost:3000",
+        retrieved = 30,
+        retrieve = 40,
+        postData = { additionalData: "hello" },
+        ajaxType = "GET",
         ajaxSettings = {
           global: false,
           type: "POST"
@@ -270,23 +274,24 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
       var errorSpy = sinon.spy();
 
-            this.$list.lazyloader( {
-                url: url,
-                $progress: this.$progress,
-                retrieved: retrieved,
-                retrieve: retrieve,
-                postData: postData,
-                threshold: threshold,
-                ajaxType: ajaxType,
-            ajaxSettings: ajaxSettings } ).on( "lazyloadererror", errorSpy );
+      this.$list.lazyloader( {
+        url: url,
+        $progress: this.$progress,
+        retrieved: retrieved,
+        retrieve: retrieve,
+        postData: postData,
+        threshold: threshold,
+        ajaxType: ajaxType,
+        ajaxSettings: ajaxSettings
+      } ).on( "lazyloadererror", errorSpy );
 
       _loadStub.restore();
 
       var data = this.$list.data()[ "mobile-lazyloader" ];
       data._eventTriggered = true;
 
-            this.$scrollContainer.height( windowHeight );
-                this.$list.height( listHeight );
+      this.$scrollContainer.height( windowHeight );
+      this.$list.height( listHeight );
 
       this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
 
@@ -304,17 +309,18 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       // To return successful ajax call (having used .resolve() )
       call.resolve( responseData );
 
-            assert.ok(
-                this.ajaxStub.calledWithExactly( url, sinon.match( {
-                    type: ajaxSettings.type,
-                    data: {
-                        retrieved: retrieved,
-                        retrieve: retrieve,
-                        reset: false,
-                        additionalData: postData.additionalData
-                    },
-                    dataType: "json",
-                global: ajaxSettings.global } ) ) );
+      assert.ok(
+        this.ajaxStub.calledWithExactly( url, sinon.match( {
+          type: ajaxSettings.type,
+          data: {
+            retrieved: retrieved,
+            retrieve: retrieve,
+            reset: false,
+            additionalData: postData.additionalData
+          },
+          dataType: "json",
+          global: ajaxSettings.global
+        } ) ) );
 
       assert.ok( errorSpy.calledWithExactly(
         sinon.match.object,
@@ -366,26 +372,25 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         testLoad( test, provider[ test ] );
       }
 
-            function testLoad( test, testData ) {
-                QUnit.test(
-                    "_load: Test threshold is exceeded and the ajax request succeeds. " + test,
-                    function( assert ) {
-                        var
-                            listHeightBeforeLoad = 100,
-                            windowHeightBeforeLoad = 200,
-                            windowHeightAfterLoad = 400,
-                            windowScrollTop = 50,
+      function testLoad( test, testData ) {
+        QUnit.test(
+          "_load: Test threshold is exceeded and the ajax request succeeds. " + test,
+          function( assert ) {
+            var
+              listHeightBeforeLoad = 100,
+              windowHeightBeforeLoad = 200,
+              windowHeightAfterLoad = 400,
+              windowScrollTop = 50,
 
-
-                            url = "http://localhost:3000",
-                            templateId = "user",
-                            $progress = this.$progress,
-                            retrieved = 30,
-                            retrieve = testData.retrieve,
-                            eventTimeout = 200,
-                            postData = { additionalData: "hello" },
-                            threshold = 300,
-                            ajaxType = "GET",
+              url = "http://localhost:3000",
+              templateId = "user",
+              $progress = this.$progress,
+              retrieved = 30,
+              retrieve = testData.retrieve,
+              eventTimeout = 200,
+              postData = { additionalData: "hello" },
+              threshold = 300,
+              ajaxType = "GET",
               ajaxSettings = {
                 global: false,
                 type: "POST"
@@ -393,22 +398,23 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
             var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
-                        this.$scrollContainer.height( windowHeightBeforeLoad );
-                                this.$list.height( listHeightBeforeLoad );
+            this.$scrollContainer.height( windowHeightBeforeLoad );
+            this.$list.height( listHeightBeforeLoad );
 
             this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
 
-                        var options = {
-                            url: url,
-                            templateId: templateId,
-                            $progress: $progress,
-                            retrieved: retrieved,
-                            retrieve: retrieve,
-                            eventTimeout: eventTimeout,
-                            postData: postData,
-                            threshold: threshold,
-                            ajaxType: ajaxType,
-                        ajaxSettings: ajaxSettings };
+            var options = {
+              url: url,
+              templateId: templateId,
+              $progress: $progress,
+              retrieved: retrieved,
+              retrieve: retrieve,
+              eventTimeout: eventTimeout,
+              postData: postData,
+              threshold: threshold,
+              ajaxType: ajaxType,
+              ajaxSettings: ajaxSettings
+            };
 
             this.$progress.hide();
 
@@ -434,9 +440,9 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
             assert.ok( this.$progress.is( ":visible" ) );
 
-                        this.$scrollContainer.height( windowHeightAfterLoad );
+            this.$scrollContainer.height( windowHeightAfterLoad );
             this.$list.height( testData.listHeightAfterLoad );// Get first ajax call
-                        var call = $.ajax.getCall( 0 ).returnValue;
+            var call = $.ajax.getCall( 0 ).returnValue;
 
             var items = [ { name: "John" }, { name: "Jane" } ];
             var responseData = { items: items };
@@ -444,17 +450,18 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             // To return successful ajax call (having used .resolve() )
             call.resolve( responseData );
 
-                        assert.ok(
-                            this.ajaxStub.calledWithExactly( url, sinon.match( {
-                                type: ajaxSettings.type,
-                                data: {
-                                    retrieved: retrieved,
-                                    retrieve: retrieve,
-                                    reset: false,
-                                    additionalData: postData.additionalData
-                                },
-                                dataType: "json",
-                            global: ajaxSettings.global } ) ) );
+            assert.ok(
+              this.ajaxStub.calledWithExactly( url, sinon.match( {
+                type: ajaxSettings.type,
+                data: {
+                  retrieved: retrieved,
+                  retrieve: retrieve,
+                  reset: false,
+                  additionalData: postData.additionalData
+                },
+                dataType: "json",
+                global: ajaxSettings.global
+              } ) ) );
 
             var $listItems = this.$list.children( "li" );
 
