@@ -261,7 +261,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       self.refresh();
 
       // Get the height of the listview and window
-      var elementHeightExceedsWindowHeight = $element.height() > $element.scrollParent();
+      var elementHeightExceedsWindowHeight = $element.height() > $element.scrollParent().height();
 
       // Only hide the progress element if no more items are going to be loaded
       // immediately after this
