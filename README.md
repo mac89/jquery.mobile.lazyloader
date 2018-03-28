@@ -172,7 +172,7 @@ The server response is expected to be in a JSON format with the mandatory `items
 			type: "POST"
 		}</td>
 		<td>No</td>
-		<td>The ajax settings to use in the request. The <b>dataType</b> setting cannot be overwritten, it will always be `json`.</td>
+		<td>The ajax settings to use in the request. The <b>dataType</b> setting cannot be overwritten, it will always be `json`. The setting defined here take precedence over the deprecated `ajaxType` and `postData` options. For instance `ajaxType` will be overwritten if the ajax setting <b>type</b> is defined.</td>
 	</tr>
 	<tr>
 		<td><s>ajaxType</s> (deprecated)</td>
