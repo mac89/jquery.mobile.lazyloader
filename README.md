@@ -167,16 +167,24 @@ The server response is expected to be in a JSON format with the mandatory `items
 		<td>The search query that is posted along in the request. Changing this option will trigger the `reset` function.</td>
 	</tr>
 	<tr>
-		<td>ajaxType</td>
-		<td>POST</td>
+		<td>ajaxSettings</td>
+		<td>{<br>
+			type: "POST"
+		}</td>
 		<td>No</td>
-		<td>The ajax request type. Can be either GET or POST.</td>
+		<td>The ajax settings to use in the request. The <b>dataType</b> setting cannot be overwritten, it will always be `json`.</td>
 	</tr>
 	<tr>
-		<td>postData</td>
-		<td>Empty</td>
-		<td>No</td>
-		<td>Additional data to be sent in the requests.</td>
+		<td><s>ajaxType</s> (deprecated)</td>
+		<td><s>POST</s></td>
+		<td><s>No</s></td>
+		<td><s>The ajax request type. Can be either GET or POST.</s></td>
+	</tr>
+	<tr>
+		<td><s>postData</s> (deprecated)</td>
+		<td><s>Empty</s></td>
+		<td><s>No</s></td>
+		<td><s>Additional data to be sent in the requests.</s></td>
 	</tr>
 </table>
 

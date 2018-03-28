@@ -157,6 +157,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     /**
      * Additional data to post along with the request.
      * @type {Object}
+     * @deprecated Use the ajaxSettings instead.
      */
     postData: {},
 
@@ -170,8 +171,18 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     /**
      * The ajax request type.
      * @type {string}
+     * @deprecated Use the ajaxSettings instead.
      */
-    ajaxType: "POST"
+    ajaxType: "POST",
+
+    /**
+     * The custom ajax settings to use in a request. The dataType setting cannot be overwritten, it
+     * will always be "json".
+     * @type {JQueryAjaxSettings}
+     */
+    ajaxSettings: {
+      type: "POST"
+    }
   },
 
   /**
@@ -292,16 +303,23 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       jqXHR.abort();
     }
 
-    jqXHR = $.ajax( options.url, {
-      type: options.ajaxType,
-      data: $.extend( {}, options.postData, {
-        retrieved: options.retrieved,
-        retrieve: options.retrieve,
-        reset: reset === true,
-        searchQuery: options.searchQuery
-      } ),
-      dataType: "json"
-    } );
+    jqXHR = $.ajax(
+      options.url,
+      $.extend(
+        true,
+        { type: options.ajaxType, data: options.postData },
+        options.ajaxSettings,
+        {
+          data: {
+            retrieved: options.retrieved,
+            retrieve: options.retrieve,
+            reset: reset === true,
+            searchQuery: options.searchQuery
+          },
+          dataType: "json"
+        }
+      )
+    );
 
     self.jqXHR = jqXHR;
 
