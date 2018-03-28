@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed incorrect url to the plugin within the `sample.html`.
 - \#9: More items are now correctly loaded even if the scroll container isn't the window. 
 
+### Added
+- \#11: Added an `ajaxSettings` option. This option deprecates the `ajaxType` and `postData` options, which will be removed in a future version.
+
 ## [2.0.2] - 2018-03-09
 ### Fixed
 - \#3: Corrected an issue that caused the plugin not to load items on initialization if the `filter` option was set to `true` 
