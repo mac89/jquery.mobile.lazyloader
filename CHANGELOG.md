@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - \#7: The plugin defaults are no longer being overwritten by the options during creation.
 - Fixed incorrect url to the plugin within the `sample.html`.
+- \#9: More items are now correctly loaded even if the scroll container isn't the window. 
 
 ## [2.0.2] - 2018-03-09
 ### Fixed

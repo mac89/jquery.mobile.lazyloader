@@ -150,10 +150,12 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       // Don't try to load anything until the scroll is given some time to get closer
       // to the bottom
       self._loadTimeout = setTimeout( function() {
+        var $element = self.element,
+          $scrollParent = $element.scrollParent();
 
         // Check if the page scroll location is close to the bottom
-        if ( self.element.height() - options.threshold <=
-             $window.scrollTop() + $window.height() ) {
+        if ( $element.height() - options.threshold <=
+          $scrollParent.scrollTop() + $scrollParent.height() ) {
 
           // Get the progress element
           $( options.$progress ).show();
@@ -259,7 +261,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       self.refresh();
 
       // Get the height of the listview and window
-      var elementHeightExceedsWindowHeight = $element.height() > $window.height();
+      var elementHeightExceedsWindowHeight = $element.height() > $element.scrollParent();
 
       // Only hide the progress element if no more items are going to be loaded
       // immediately after this
