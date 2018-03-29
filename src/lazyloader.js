@@ -52,6 +52,12 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     eventTimeout: 100,
 
     /**
+     * The timeout used before a request is sent after setting the searchQuery option.
+     * @type {number}
+     */
+    searchTimeout: 300,
+
+    /**
      * Additional data to post along with the request.
      * @type {Object}
      * @deprecated Use the ajaxSettings instead.
@@ -90,6 +96,12 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     var self = this;
 
     self._done = false;
+
+    /**
+     * The time the last request was made
+     * @type {number}
+     */
+    self._lastRequestTime = 0;
 
     // Get any user defined settings and extend / merge / override them with
     // defaultSettings
@@ -158,14 +170,16 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
         timeout = 0;
       }
 
+      clearTimeout( self._loadTimeout );
+
       // Don't try to load anything until the scroll is given some time to get closer
       // to the bottom
       self._loadTimeout = setTimeout( function() {
         var $element = self.element;
 
-        // Check if the page scroll location is close to the bottom
+        // Check if the page scroll location is close to the bottom or if a reset is done
         if ( $element.height() + $element.offset().top - options.threshold <
-          self._getScrollParent().scrollTop() + self._getWindowHeight() ) {
+          self._getScrollParent().scrollTop() + self._getWindowHeight() || reset ) {
 
           // Get the progress element
           $( options.$progress ).show();
@@ -199,6 +213,12 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       jqXHR.abort();
     }
 
+    // Get the current time
+    var requestTime = Date.now();
+
+    // Store it as the time of the last request
+    self._lastRequestTime = requestTime;
+
     jqXHR = $.ajax(
       options.url,
       $.extend(
@@ -219,7 +239,9 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
     self.jqXHR = jqXHR;
 
-    jqXHR.then( self._parseResponse.bind( self ), function( e, textStatus ) {
+    jqXHR.then( function( data, textStatus ) {
+      self._parseResponse( data, textStatus, requestTime, reset );
+    }, function( e, textStatus ) {
       if ( textStatus !== "abort" ) {
         self._handleError( requestErrorCode, e );
       }
@@ -234,21 +256,30 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
    * Parses the response data.
    * @param {{items: Object[]}} data The response data.
    * @param {string} textStatus String categorizing the status of the request.
+   * @param {number} requestTime The time the request was made.
+   * @param {boolean} reset Indicates the request is a reset request.
    * @private
    */
-  _parseResponse: function( data, textStatus ) {
-    if ( textStatus === "abort" ) {
+  _parseResponse: function( data, textStatus, requestTime, reset ) {
+
+    // Don't bother parsing the response if a new request was made in the meantime
+    if ( requestTime < this._lastRequestTime ) {
       return;
     }
 
     var self = this,
       options = self.options,
-      items = data.items;
+      items = data.items,
+      $element = self.element;
+
+    // It's possible a request added list items while this request was underway
+    if ( reset ) {
+      $element.empty();
+    }
 
     // Check if the items property is an array
     if ( Array.isArray( items ) ) {
-      var $element = self.element,
-        count = items.length,
+      var count = items.length,
         html = [],
 
         // Check if we're done loading
@@ -394,7 +425,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
     // Trigger a reset if the searchQuery is set
     if ( key === searchQueryOption ) {
-      this.reset();
+      this.reset( this.options.searchTimeout );
     }
   },
 

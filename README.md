@@ -143,6 +143,12 @@ The server response is expected to be in a JSON format with the mandatory `items
 		<td>The timeout used before attempting to load more items when it is triggered by either the `scrollstart`, `scrollstop`, or `wheel` event.</td>
 	</tr>
 	<tr>
+		<td>searchTimeout</td>
+		<td>300</td>
+		<td>No</td>
+		<td>The timeout used before a request is sent after setting the `searchQuery` option.</td>
+	</tr>
+	<tr>
 		<td>threshold</td>
 		<td>100</td>
 		<td>No</td>
