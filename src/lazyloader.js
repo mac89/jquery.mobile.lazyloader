@@ -161,12 +161,11 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       // Don't try to load anything until the scroll is given some time to get closer
       // to the bottom
       self._loadTimeout = setTimeout( function() {
-        var $element = self.element,
-          $scrollParent = $element.scrollParent();
+        var $element = self.element;
 
         // Check if the page scroll location is close to the bottom
-        if ( $element.height() - options.threshold <=
-          $scrollParent.scrollTop() + $scrollParent.height() ) {
+        if ( $element.height() + $element.offset().top - options.threshold <
+          self._getScrollParent().scrollTop() + self._getWindowHeight() ) {
 
           // Get the progress element
           $( options.$progress ).show();
@@ -278,8 +277,16 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       // Refresh the listview so it is re-enhanced by JQM
       self.refresh();
 
+      // Get the scroll parent
+      var $scrollParent = self._getScrollParent();
+
+      // If the scroll parent is the document its height will always be higher than that of the
+      // list. Therefor we're going to use the window's height.
+      var scrollParentHeight = $scrollParent.is( document ) ?
+        self._getWindowHeight() : $scrollParent.height();
+
       // Get the height of the listview and window
-      var elementHeightExceedsWindowHeight = $element.height() > $element.scrollParent().height();
+      var elementHeightExceedsWindowHeight = $element.height() > scrollParentHeight;
 
       // Only hide the progress element if no more items are going to be loaded
       // immediately after this
@@ -316,6 +323,24 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
   },
 
   /**
+   * Returns the scroll parent of the list.
+   * @return {JQuery} The scroll parent.
+   * @private
+   */
+  _getScrollParent: function() {
+
+    // Get the list's first scroll parent
+    var $scrollParent = this.element.scrollParent();
+
+    // Move on to the scroll parent of the current scroll parent if there is no vertical scrollbar
+    // present
+    while ( $scrollParent[ 0 ].scrollHeight <= $scrollParent[ 0 ].clientHeight ) {
+      $scrollParent = $scrollParent.scrollParent();
+    }
+    return $scrollParent;
+  },
+
+  /**
    * Handles an event.
    * @private
    */
@@ -347,6 +372,10 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
     // Trigger an event to announce that an error occurred during parsing
     this._trigger( errorEvent, {}, { errorCode: errorCode, errorData: data } );
+  },
+
+  _getWindowHeight: function() {
+    return $window.height();
   },
 
   /**
