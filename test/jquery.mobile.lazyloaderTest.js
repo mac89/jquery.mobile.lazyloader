@@ -9,6 +9,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       result.args = event;
       return result;
     } );
+    this.clearTimeoutStub = this.sandbox.stub( window, "clearTimeout" );
 
     this.$scrollContainer =
       $( "<div style='overflow: scroll'></div>" ).appendTo( $qunitFixture );
@@ -60,6 +61,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     var data = this.$list.data()[ "mobile-lazyloader" ];
 
+    assert.equal( data._done, false );
+    assert.equal( data._lastRequestTime, 0 );
     assert.equal( data.options.url, url );
     assert.equal( data.options.templateId, templateId );
     assert.equal( data.options.$progress, $progress );
@@ -138,6 +141,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     this.clock.tick( 0 );
 
+    assert.ok( this.clearTimeoutStub.notCalled );
     assert.ok( this.ajaxStub.notCalled );
   } );
 
@@ -145,7 +149,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     var listHeight = 400,
       windowHeight = 300,
       threshold = 49,
-      windowScrollTop = 50;
+      windowScrollTop = 50,
+      _loadTimeout = 999;
 
     var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
@@ -159,6 +164,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     var data = this.$list.data()[ "mobile-lazyloader" ];
     data._eventTriggered = true;
+    data._loadTimeout = _loadTimeout;
 
     this.sandbox.stub( data, "_getWindowHeight" ).returns( windowHeight );
     this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
@@ -168,6 +174,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     this.clock.tick( 0 );
 
+    assert.ok( this.clearTimeoutStub.calledWithExactly( _loadTimeout ) );
     assert.ok( this.ajaxStub.notCalled );
     assert.ok( doneloadingSpy.calledOnce );
     assert.notOk( data._eventTriggered );
@@ -187,7 +194,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       ajaxSettings = {
         global: false,
         type: "POST"
-      };
+      },
+      _loadTimeout = 999;
 
     this.$progress.hide();
 
@@ -211,6 +219,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     var data = this.$list.data()[ "mobile-lazyloader" ];
     data._eventTriggered = true;
+    data._loadTimeout = _loadTimeout;
 
     this.sandbox.stub( data, "_getWindowHeight" ).returns( windowHeight );
     this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
@@ -229,6 +238,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     // To return failed ajax call (having used .reject() )
     call.reject( errorData );
 
+    assert.ok( this.clearTimeoutStub.calledWithExactly( _loadTimeout ) );
     assert.ok(
       this.ajaxStub.calledWithExactly( url, sinon.match( {
         type: ajaxSettings.type,
@@ -266,7 +276,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         ajaxSettings = {
           global: false,
           type: "POST"
-        };
+        },
+        _loadTimeout = 999;
 
       this.$progress.hide();
 
@@ -289,6 +300,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
       var data = this.$list.data()[ "mobile-lazyloader" ];
       data._eventTriggered = true;
+      data._loadTimeout = _loadTimeout;
 
       this.$list.height( listHeight );
 
@@ -309,6 +321,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       // To return successful ajax call (having used .resolve() )
       call.resolve( responseData );
 
+      assert.ok( this.clearTimeoutStub.calledWithExactly( _loadTimeout ) );
       assert.ok(
         this.ajaxStub.calledWithExactly( url, sinon.match( {
           type: ajaxSettings.type,
@@ -331,40 +344,187 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     }
   );
 
+  QUnit.test(
+    "_load: Test threshold is exceeded and the ajax request succeeds, " +
+    "but the request's time is lower than the last request's time",
+    function( assert ) {
+      var
+        listHeight = 400,
+        windowHeight = 300,
+        threshold = 50,
+        windowScrollTop = 50,
+        url = "http://localhost:3000",
+        retrieved = 30,
+        retrieve = 40,
+        postData = { additionalData: "hello" },
+        ajaxType = "GET",
+        ajaxSettings = {
+          global: false,
+          type: "POST"
+        },
+        _loadTimeout = 999;
+
+      this.$progress.hide();
+
+      var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
+
+      var eventSpy = sinon.spy();
+
+      this.$list.lazyloader( {
+        url: url,
+        $progress: this.$progress,
+        retrieved: retrieved,
+        retrieve: retrieve,
+        postData: postData,
+        threshold: threshold,
+        ajaxType: ajaxType,
+        ajaxSettings: ajaxSettings
+      } ).on( "lazyloadererror", eventSpy )
+        .on( "lazyloaderbeforerender", eventSpy )
+        .on( "lazyloaderdoneloading", eventSpy )
+        .on( "lazyloaderalldone", eventSpy );
+
+      _loadStub.restore();
+
+      var data = this.$list.data()[ "mobile-lazyloader" ];
+      data._eventTriggered = true;
+      data._loadTimeout = _loadTimeout;
+
+      this.$scrollContainer.height( windowHeight );
+      this.$list.height( listHeight );
+
+      this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
+
+      data._load();
+
+      this.clock.tick( 0 );
+
+      assert.ok( this.$progress.is( ":visible" ) );
+
+      data._lastRequestTime = 1;
+
+      // Get first ajax call
+      var call = $.ajax.getCall( 0 ).returnValue;
+
+      var responseData = { items: "Not an array" };
+
+      // To return successful ajax call (having used .resolve() )
+      call.resolve( responseData );
+
+      assert.ok( this.clearTimeoutStub.calledWithExactly( _loadTimeout ) );
+      assert.ok(
+        this.ajaxStub.calledWithExactly( url, sinon.match( {
+          type: ajaxSettings.type,
+          data: {
+            retrieved: retrieved,
+            retrieve: retrieve,
+            reset: false,
+            additionalData: postData.additionalData
+          },
+          dataType: "json",
+          global: ajaxSettings.global
+        } ) ) );
+
+      assert.ok( eventSpy.notCalled );
+
+      assert.notOk( data._eventTriggered );
+    }
+  );
+
   (
     function() {
+      var existingItem = { name: "Jill" };
+      var items = [ { name: "John" }, { name: "Jane" } ];
+      var itemsWithExistingItem = $.merge( [ existingItem ], items );
+
       var provider = {
-        "Retrieved item nr less than requested item nr and list smaller than window": {
+        // eslint-disable-next-line max-len
+        "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to false": {
           retrieve: 3,
           listHeightAfterLoad: 300,
           assertProgressIsVisible: false,
           assertAllDone: true,
           assertLoadIsCalledAgain: false,
-          assertDoneLoading: true
+          assertDoneLoading: true,
+          reset: false,
+          expectedListItems: itemsWithExistingItem
         },
-        "Retrieved item nr less than requested item nr and list higher than window": {
+        // eslint-disable-next-line max-len
+        "Retrieved item nr less than requested item nr and list higher than window. Reset is set to false": {
           retrieve: 3,
           listHeightAfterLoad: 500,
           assertProgressIsVisible: false,
           assertAllDone: true,
           assertLoadIsCalledAgain: false,
-          assertDoneLoading: true
+          assertDoneLoading: true,
+          reset: false,
+          expectedListItems: itemsWithExistingItem
         },
-        "Retrieved item nr equal to requested item nr and list smaller than window": {
+        // eslint-disable-next-line max-len
+        "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to false": {
           retrieve: 2,
           listHeightAfterLoad: 300,
           assertProgressIsVisible: true,
           assertAllDone: false,
           assertLoadIsCalledAgain: true,
-          assertDoneLoading: false
+          assertDoneLoading: false,
+          reset: false,
+          expectedListItems: itemsWithExistingItem
         },
-        "Retrieved item nr equal to requested item nr and list higher than window": {
+        // eslint-disable-next-line max-len
+        "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to false": {
           retrieve: 2,
           listHeightAfterLoad: 500,
           assertProgressIsVisible: false,
           assertAllDone: false,
           assertLoadIsCalledAgain: false,
-          assertDoneLoading: true
+          assertDoneLoading: true,
+          reset: false,
+          expectedListItems: itemsWithExistingItem
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to true": {
+          retrieve: 3,
+          listHeightAfterLoad: 300,
+          assertProgressIsVisible: false,
+          assertAllDone: true,
+          assertLoadIsCalledAgain: false,
+          assertDoneLoading: true,
+          reset: true,
+          expectedListItems: items
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr less than requested item nr and list higher than window. Reset is set to true": {
+          retrieve: 3,
+          listHeightAfterLoad: 500,
+          assertProgressIsVisible: false,
+          assertAllDone: true,
+          assertLoadIsCalledAgain: false,
+          assertDoneLoading: true,
+          reset: true,
+          expectedListItems: items
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to true": {
+          retrieve: 2,
+          listHeightAfterLoad: 300,
+          assertProgressIsVisible: true,
+          assertAllDone: false,
+          assertLoadIsCalledAgain: true,
+          assertDoneLoading: false,
+          reset: true,
+          expectedListItems: items
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to true": {
+          retrieve: 2,
+          listHeightAfterLoad: 500,
+          assertProgressIsVisible: false,
+          assertAllDone: false,
+          assertLoadIsCalledAgain: false,
+          assertDoneLoading: true,
+          reset: true,
+          expectedListItems: items
         }
       };
 
@@ -394,11 +554,13 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
               ajaxSettings = {
                 global: false,
                 type: "POST"
-              };
+              },
+              _loadTimeout = 999;
 
             var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
-            this.$list.height( listHeightBeforeLoad );
+            this.$list.append( "<li>" + existingItem.name + "</li>" )
+              .height( listHeightBeforeLoad );
 
             this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
 
@@ -432,21 +594,22 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
             var data = this.$list.data()[ "mobile-lazyloader" ];
             data._eventTriggered = true;
+            data._loadTimeout = _loadTimeout;
 
             var getWindowHeightStub = this.sandbox.stub( data, "_getWindowHeight" );
             getWindowHeightStub.onFirstCall().returns( windowHeightBeforeLoad );
             getWindowHeightStub.onSecondCall().returns( windowHeightAfterLoad );
 
-            data._load();
+            data._load( 0, testData.reset );
 
             this.clock.tick( 0 );
 
+            assert.ok( this.clearTimeoutStub.calledWithExactly( _loadTimeout ) );
             assert.ok( this.$progress.is( ":visible" ) );
 
             this.$list.height( testData.listHeightAfterLoad );// Get first ajax call
             var call = $.ajax.getCall( 0 ).returnValue;
 
-            var items = [ { name: "John" }, { name: "Jane" } ];
             var responseData = { items: items };
 
             // To return successful ajax call (having used .resolve() )
@@ -458,7 +621,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
                 data: {
                   retrieved: retrieved,
                   retrieve: retrieve,
-                  reset: false,
+                  reset: testData.reset,
                   additionalData: postData.additionalData
                 },
                 dataType: "json",
@@ -467,10 +630,10 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
             var $listItems = this.$list.children( "li" );
 
-            assert.equal( $listItems.length, items.length );
+            assert.equal( $listItems.length, testData.expectedListItems.length );
 
-            for ( var i = 0; i < items.length; i++ ) {
-              assert.equal( $( $listItems.get( i ) ).html(), items[ i ].name );
+            for ( var i = 0; i < testData.expectedListItems.length; i++ ) {
+              assert.equal( $( $listItems.get( i ) ).html(), testData.expectedListItems[ i ].name );
             }
 
             assert.equal( data.options.retrieved, retrieved + items.length );
@@ -610,7 +773,6 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             var _loadTimeout = 999;
 
             var loadStub = this.sandbox.stub( $.mobile.lazyloader.prototype, "_load" );
-            var clearTimeoutSpy = this.sandbox.spy( window, "clearTimeout" );
 
             this.$list.lazyloader();
 
@@ -622,7 +784,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             $( window ).trigger( testData.event );
 
             assert.ok( loadStub.calledOnce );
-            assert.ok( clearTimeoutSpy.calledWithExactly( _loadTimeout ) );
+            assert.ok( this.clearTimeoutStub.calledWithExactly( _loadTimeout ) );
           }
         );
       }
