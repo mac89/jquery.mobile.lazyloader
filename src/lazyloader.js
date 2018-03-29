@@ -374,6 +374,11 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     this._trigger( errorEvent, {}, { errorCode: errorCode, errorData: data } );
   },
 
+  /**
+   * Returns the window height
+   * @return {number} The window height.
+   * @private
+   */
   _getWindowHeight: function() {
     return $window.height();
   },
