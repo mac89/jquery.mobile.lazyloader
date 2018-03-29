@@ -142,8 +142,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
   } );
 
   QUnit.test( "_load: Test threshold is not exceeded", function( assert ) {
-    var
-      listHeight = 400,
+    var listHeight = 400,
       windowHeight = 300,
       threshold = 49,
       windowScrollTop = 50;
@@ -152,7 +151,6 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     var doneloadingSpy = sinon.spy();
 
-    this.$scrollContainer.height( windowHeight );
     this.$list.height( listHeight );
     this.$list.lazyloader( { threshold: threshold } )
       .on( "lazyloaderdoneloading", doneloadingSpy );
@@ -162,7 +160,9 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     var data = this.$list.data()[ "mobile-lazyloader" ];
     data._eventTriggered = true;
 
+    this.sandbox.stub( data, "_getWindowHeight" ).returns( windowHeight );
     this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
+    this.sandbox.stub( $.prototype, "offset" ).returns( { top: 0 } );
 
     data._load();
 
@@ -191,7 +191,6 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     this.$progress.hide();
 
-    this.$scrollContainer.height( windowHeight );
     this.$list.height( listHeight );
     var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
@@ -213,6 +212,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     var data = this.$list.data()[ "mobile-lazyloader" ];
     data._eventTriggered = true;
 
+    this.sandbox.stub( data, "_getWindowHeight" ).returns( windowHeight );
     this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
 
     data._load();
@@ -290,10 +290,10 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       var data = this.$list.data()[ "mobile-lazyloader" ];
       data._eventTriggered = true;
 
-      this.$scrollContainer.height( windowHeight );
       this.$list.height( listHeight );
 
       this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
+      this.sandbox.stub( data, "_getWindowHeight" ).returns( windowHeight );
 
       data._load();
 
@@ -398,7 +398,6 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
             var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
-            this.$scrollContainer.height( windowHeightBeforeLoad );
             this.$list.height( listHeightBeforeLoad );
 
             this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
@@ -434,13 +433,16 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             var data = this.$list.data()[ "mobile-lazyloader" ];
             data._eventTriggered = true;
 
+            var getWindowHeightStub = this.sandbox.stub( data, "_getWindowHeight" );
+            getWindowHeightStub.onFirstCall().returns( windowHeightBeforeLoad );
+            getWindowHeightStub.onSecondCall().returns( windowHeightAfterLoad );
+
             data._load();
 
             this.clock.tick( 0 );
 
             assert.ok( this.$progress.is( ":visible" ) );
 
-            this.$scrollContainer.height( windowHeightAfterLoad );
             this.$list.height( testData.listHeightAfterLoad );// Get first ajax call
             var call = $.ajax.getCall( 0 ).returnValue;
 
