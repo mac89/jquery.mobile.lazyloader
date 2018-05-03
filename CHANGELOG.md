@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2018-05-03
+### Fixed
+- \#17: Fixed `postData` and `ajaxSettings` defaults being overwritten when a request is made.
+
 ## [2.2.0] - 2018-03-30
 ### Added
 - \#13: Added a `searchTimeout` option that is used to prevent requests from being needlessly sent if the `searchQuery` option is adjusted in quick succession. 

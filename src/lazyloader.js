@@ -223,6 +223,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       options.url,
       $.extend(
         true,
+        {},
         { type: options.ajaxType, data: options.postData },
         options.ajaxSettings,
         {
