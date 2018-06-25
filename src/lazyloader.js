@@ -185,7 +185,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
           $( options.$progress ).show();
 
           // Load more items
-          self._sendRequest( reset );
+          self._sendRequest( options, reset );
         } else {
 
           // Indicate a request can be made by an event handler again
@@ -201,12 +201,12 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
   /**
    * Creates and sends the request.
+   * @param {{}} options The options used at the time the request was made.
    * @param {boolean} [reset=false] Indicates the request is a reset request.
    * @private
    */
-  _sendRequest: function( reset ) {
+  _sendRequest: function( options, reset ) {
     var self = this,
-      options = self.options,
       jqXHR = self.jqXHR;
 
     if ( jqXHR ) {
@@ -275,6 +275,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
     // It's possible a request added list items while this request was underway
     if ( reset ) {
+      options.retrieved = 0;
       $element.empty();
     }
 

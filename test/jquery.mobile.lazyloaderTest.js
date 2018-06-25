@@ -436,6 +436,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       var existingItem = { name: "Jill" };
       var items = [ { name: "John" }, { name: "Jane" } ];
       var itemsWithExistingItem = $.merge( [ existingItem ], items );
+      var retrieved = 30;
 
       var provider = {
         // eslint-disable-next-line max-len
@@ -447,7 +448,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: false,
           assertDoneLoading: true,
           reset: false,
-          expectedListItems: itemsWithExistingItem
+          expectedListItems: itemsWithExistingItem,
+          expectedRetrieved: retrieved
         },
         // eslint-disable-next-line max-len
         "Retrieved item nr less than requested item nr and list higher than window. Reset is set to false": {
@@ -458,7 +460,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: false,
           assertDoneLoading: true,
           reset: false,
-          expectedListItems: itemsWithExistingItem
+          expectedListItems: itemsWithExistingItem,
+          expectedRetrieved: retrieved
         },
         // eslint-disable-next-line max-len
         "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to false": {
@@ -469,7 +472,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: true,
           assertDoneLoading: false,
           reset: false,
-          expectedListItems: itemsWithExistingItem
+          expectedListItems: itemsWithExistingItem,
+          expectedRetrieved: retrieved
         },
         // eslint-disable-next-line max-len
         "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to false": {
@@ -480,7 +484,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: false,
           assertDoneLoading: true,
           reset: false,
-          expectedListItems: itemsWithExistingItem
+          expectedListItems: itemsWithExistingItem,
+          expectedRetrieved: retrieved
         },
         // eslint-disable-next-line max-len
         "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to true": {
@@ -491,7 +496,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: false,
           assertDoneLoading: true,
           reset: true,
-          expectedListItems: items
+          expectedListItems: items,
+          expectedRetrieved: 0
         },
         // eslint-disable-next-line max-len
         "Retrieved item nr less than requested item nr and list higher than window. Reset is set to true": {
@@ -502,7 +508,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: false,
           assertDoneLoading: true,
           reset: true,
-          expectedListItems: items
+          expectedListItems: items,
+          expectedRetrieved: 0
         },
         // eslint-disable-next-line max-len
         "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to true": {
@@ -513,7 +520,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: true,
           assertDoneLoading: false,
           reset: true,
-          expectedListItems: items
+          expectedListItems: items,
+          expectedRetrieved: 0
         },
         // eslint-disable-next-line max-len
         "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to true": {
@@ -524,7 +532,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: false,
           assertDoneLoading: true,
           reset: true,
-          expectedListItems: items
+          expectedListItems: items,
+          expectedRetrieved: 0
         }
       };
 
@@ -545,7 +554,6 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
               url = "http://localhost:3000",
               templateId = "user",
               $progress = this.$progress,
-              retrieved = 30,
               retrieve = testData.retrieve,
               eventTimeout = 200,
               postData = { additionalData: "hello" },
@@ -636,7 +644,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
               assert.equal( $( $listItems.get( i ) ).html(), testData.expectedListItems[ i ].name );
             }
 
-            assert.equal( data.options.retrieved, retrieved + items.length );
+            assert.equal( data.options.retrieved, testData.expectedRetrieved + items.length );
             assert.equal( doneloadingSpy.calledOnce, testData.assertDoneLoading );
             assert.ok( beforerenderSpy.calledWithExactly( sinon.match.object, items ) );
 
