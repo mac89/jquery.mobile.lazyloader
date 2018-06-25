@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.2.3] - 2018-06-25
+### Fixed
+- \#19: Truly fixed. The options as they are at the time of making the request are now used, rather than those at the time of sending the request. This in order to prevent timing issues that occur when an older request is returned before the new request is sent.
+
 ## [2.2.2] - 2018-06-25
 ### Fixed
-- \#19: The options as they are at the time of making the request are now used, rather than those at the time of sending the request. This in order to prevent timing issues that occur when an older request is returned before the new request is sent.
+- <s>\#19: The options as they are at the time of making the request are now used, rather than those at the time of sending the request. This in order to prevent timing issues that occur when an older request is returned before the new request is sent.</s>
 
 ## [2.2.1] - 2018-05-03
 ### Fixed

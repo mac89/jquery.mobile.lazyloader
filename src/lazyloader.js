@@ -185,7 +185,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
           $( options.$progress ).show();
 
           // Load more items
-          self._sendRequest( options, reset );
+          self._sendRequest( $.extend( {}, options ), reset );
         } else {
 
           // Indicate a request can be made by an event handler again
