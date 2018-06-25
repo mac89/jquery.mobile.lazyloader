@@ -159,7 +159,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
    */
   _load: function( timeout, reset ) {
     var self = this,
-      options = self.options;
+      options = $.extend( {}, self.options );
 
     // Make sure the plugin is not already lazy loading some items and has not loaded
     // all items already.
