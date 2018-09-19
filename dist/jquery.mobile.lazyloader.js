@@ -250,6 +250,9 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     // Clear the list
     self.element.empty();
 
+    // Block it so no requests can be made by an event
+    self._blockEventRequest = true;
+
     // Load the items
     self._load( timeout, true );
   },
@@ -292,7 +295,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
         } else {
 
           // Indicate a request can be made by an event handler again
-          self._eventTriggered = false;
+          self._blockEventRequest = false;
 
           // Trigger an event to announce that the lazyloader is done loading
           self._trigger( doneLoadingEvent );
@@ -352,7 +355,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     } ).always( function() {
 
       // Indicate a request can be made by an event handler again
-      self._eventTriggered = false;
+      self._blockEventRequest = false;
     } );
   },
 
@@ -484,10 +487,10 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     var self = this;
 
     // Check if the listview is visible and an event has not triggered a load already
-    if ( !self._eventTriggered && self.element.is( ":visible" ) ) {
+    if ( !self._blockEventRequest && self.element.is( ":visible" ) ) {
 
       // Block other events from triggering a load
-      self._eventTriggered = true;
+      self._blockEventRequest = true;
 
       // Load items
       self._load( self.options.eventTimeout );
