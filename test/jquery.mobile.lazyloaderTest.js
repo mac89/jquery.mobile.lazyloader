@@ -124,6 +124,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     assert.equal( this.$list.children().length, 0 );
     assert.equal( data._done, false );
+    assert.equal( data._blockEventRequest, true );
     assert.equal( data.options.retrieved, 0 );
   } );
 
@@ -163,7 +164,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     _loadStub.restore();
 
     var data = this.$list.data()[ "mobile-lazyloader" ];
-    data._eventTriggered = true;
+    data._blockEventRequest = true;
     data._loadTimeout = _loadTimeout;
 
     this.sandbox.stub( data, "_getWindowHeight" ).returns( windowHeight );
@@ -177,7 +178,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     assert.ok( this.clearTimeoutStub.calledWithExactly( _loadTimeout ) );
     assert.ok( this.ajaxStub.notCalled );
     assert.ok( doneloadingSpy.calledOnce );
-    assert.notOk( data._eventTriggered );
+    assert.notOk( data._blockEventRequest );
   } );
 
   QUnit.test( "_load: Test threshold is exceeded and the ajax request fails", function( assert ) {
@@ -218,7 +219,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     _loadStub.restore();
 
     var data = this.$list.data()[ "mobile-lazyloader" ];
-    data._eventTriggered = true;
+    data._blockEventRequest = true;
     data._loadTimeout = _loadTimeout;
 
     this.sandbox.stub( data, "_getWindowHeight" ).returns( windowHeight );
@@ -257,7 +258,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       sinon.match( { errorCode: 1, errorData: errorData } )
     ) );
 
-    assert.notOk( data._eventTriggered );
+    assert.notOk( data._blockEventRequest );
   } );
 
   QUnit.test(
@@ -299,7 +300,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       _loadStub.restore();
 
       var data = this.$list.data()[ "mobile-lazyloader" ];
-      data._eventTriggered = true;
+      data._blockEventRequest = true;
       data._loadTimeout = _loadTimeout;
 
       this.$list.height( listHeight );
@@ -340,7 +341,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         sinon.match( { errorCode: 2, errorData: responseData } )
       ) );
 
-      assert.notOk( data._eventTriggered );
+      assert.notOk( data._blockEventRequest );
     }
   );
 
@@ -387,7 +388,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       _loadStub.restore();
 
       var data = this.$list.data()[ "mobile-lazyloader" ];
-      data._eventTriggered = true;
+      data._blockEventRequest = true;
       data._loadTimeout = _loadTimeout;
 
       this.$scrollContainer.height( windowHeight );
@@ -427,7 +428,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
       assert.ok( eventSpy.notCalled );
 
-      assert.notOk( data._eventTriggered );
+      assert.notOk( data._blockEventRequest );
     }
   );
 
@@ -601,7 +602,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             var _loadSpy = this.sandbox.spy( $.mobile.lazyloader.prototype, "_load" );
 
             var data = this.$list.data()[ "mobile-lazyloader" ];
-            data._eventTriggered = true;
+            data._blockEventRequest = true;
             data._loadTimeout = _loadTimeout;
 
             var getWindowHeightStub = this.sandbox.stub( data, "_getWindowHeight" );
@@ -655,7 +656,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             assert.equal( alldoneSpy.calledOnce, testData.assertAllDone );
 
             assert.equal( _loadSpy.calledTwice, testData.assertLoadIsCalledAgain );
-            assert.notOk( data._eventTriggered );
+            assert.notOk( data._blockEventRequest );
           }
         );
       }
@@ -667,32 +668,32 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       var provider = {
         "scrollstart with no previous event": {
           event: "scrollstart",
-          eventTriggered: false,
+          blockEventRequest: false,
           expectedLoadCallCount: 2
         },
         "scrollstop with no previous event ": {
           event: "scrollstop",
-          eventTriggered: false,
+          blockEventRequest: false,
           expectedLoadCallCount: 2
         },
         "wheel with no previous event": {
           event: "wheel",
-          eventTriggered: false,
+          blockEventRequest: false,
           expectedLoadCallCount: 2
         },
         "scrollstart with a previous event": {
           event: "scrollstart",
-          eventTriggered: true,
+          blockEventRequest: true,
           expectedLoadCallCount: 1
         },
         "scrollstop with a previous event": {
           event: "scrollstop",
-          eventTriggered: true,
+          blockEventRequest: true,
           expectedLoadCallCount: 1
         },
         "wheel with a previous event": {
           event: "wheel",
-          eventTriggered: true,
+          blockEventRequest: true,
           expectedLoadCallCount: 1
         }
       };
@@ -712,11 +713,11 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             this.$list.lazyloader( { eventTimeout: eventTimeout } );
 
             var data = this.$list.data()[ "mobile-lazyloader" ];
-            data._eventTriggered = testData.eventTriggered;
+            data._blockEventRequest = testData.blockEventRequest;
 
             $( window ).trigger( testData.event );
 
-            assert.ok( data._eventTriggered );
+            assert.ok( data._blockEventRequest );
             assert.equal( loadStub.callCount, testData.expectedLoadCallCount );
 
             if ( loadStub.secondCall ) {
@@ -754,7 +755,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
             var data = this.$list.data()[ "mobile-lazyloader" ];
 
-            assert.notOk( data._eventTriggered );
+            assert.notOk( data._blockEventRequest );
             assert.ok( loadStub.calledOnce );
           }
         );
