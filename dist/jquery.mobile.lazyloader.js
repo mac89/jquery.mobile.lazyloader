@@ -486,7 +486,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
   },
 
   /**
-   * Shows the elements in the hierarchy of the element that are hidden using CSS display.
+   * Shows the elements, that are hidden using CSS display, in the hierarchy of the element.
    * @property {Function} callback The callback function that is executed while the hierarchy is
    *   shown. The result of the callback is returned.
    * @return {*} The result of the callback function.
