@@ -379,9 +379,6 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
       this.$progress.hide();
 
-      this.$scrollContainer.hide();
-      var originalContainerStyle = this.$scrollContainer.attr( "style" );
-
       var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
       var eventSpy = sinon.spy();
@@ -406,7 +403,9 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       data._blockEventRequest = true;
       data._loadTimeout = _loadTimeout;
 
-      this.$scrollContainer.height( windowHeight );
+      this.$scrollContainer.height( windowHeight ).hide();
+      var originalContainerStyle = this.$scrollContainer.attr( "style" );
+
       this.$list.height( listHeight );
 
       this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
