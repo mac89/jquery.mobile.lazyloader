@@ -157,6 +157,9 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     var doneloadingSpy = sinon.spy();
 
+    this.$scrollContainer.hide();
+    var originalContainerStyle = this.$scrollContainer.attr( "style" );
+
     this.$list.height( listHeight );
     this.$list.lazyloader( { threshold: threshold } )
       .on( "lazyloaderdoneloading", doneloadingSpy );
@@ -179,6 +182,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     assert.ok( this.ajaxStub.notCalled );
     assert.ok( doneloadingSpy.calledOnce );
     assert.notOk( data._blockEventRequest );
+    assert.equal( this.$scrollContainer.attr( "style" ), originalContainerStyle );
   } );
 
   QUnit.test( "_load: Test threshold is exceeded and the ajax request fails", function( assert ) {
@@ -199,6 +203,9 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       _loadTimeout = 999;
 
     this.$progress.hide();
+
+    this.$scrollContainer.hide();
+    var originalContainerStyle = this.$scrollContainer.attr( "style" );
 
     this.$list.height( listHeight );
     var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
@@ -259,6 +266,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     ) );
 
     assert.notOk( data._blockEventRequest );
+    assert.equal( this.$scrollContainer.attr( "style" ), originalContainerStyle );
   } );
 
   QUnit.test(
@@ -281,6 +289,9 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         _loadTimeout = 999;
 
       this.$progress.hide();
+
+      this.$scrollContainer.hide();
+      var originalContainerStyle = this.$scrollContainer.attr( "style" );
 
       var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
@@ -342,6 +353,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       ) );
 
       assert.notOk( data._blockEventRequest );
+      assert.equal( this.$scrollContainer.attr( "style" ), originalContainerStyle );
     }
   );
 
@@ -366,6 +378,9 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         _loadTimeout = 999;
 
       this.$progress.hide();
+
+      this.$scrollContainer.hide();
+      var originalContainerStyle = this.$scrollContainer.attr( "style" );
 
       var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
@@ -429,6 +444,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       assert.ok( eventSpy.notCalled );
 
       assert.notOk( data._blockEventRequest );
+      assert.equal( this.$scrollContainer.attr( "style" ), originalContainerStyle );
     }
   );
 
@@ -595,6 +611,9 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
             this.$progress.hide();
 
+            this.$scrollContainer.hide();
+            var originalContainerStyle = this.$scrollContainer.attr( "style" );
+
             var beforerenderSpy = sinon.spy();
             var doneloadingSpy = sinon.spy();
             var alldoneSpy = sinon.spy();
@@ -666,6 +685,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
             assert.equal( _loadSpy.calledTwice, testData.assertLoadIsCalledAgain );
             assert.notOk( data._blockEventRequest );
+            assert.equal( this.$scrollContainer.attr( "style" ), originalContainerStyle );
           }
         );
       }
