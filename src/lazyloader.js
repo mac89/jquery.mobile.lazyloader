@@ -181,8 +181,10 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
         var $element = self.element;
 
         // Check if the page scroll location is close to the bottom or if a reset is done
-        if ( $element.height() + $element.offset().top - options.threshold <
-          self._getScrollParent().scrollTop() + self._getWindowHeight() || reset ) {
+        if ( reset || self._showHierarchy( function() {
+          return $element.height() + $element.offset().top - options.threshold <
+            self._getScrollParent().scrollTop() + self._getWindowHeight();
+        } ) ) {
 
           // Get the progress element
           $( options.$progress ).show();
@@ -313,16 +315,20 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       // Refresh the listview so it is re-enhanced by JQM
       self.refresh();
 
-      // Get the scroll parent
-      var $scrollParent = self._getScrollParent();
+      // Check if the element's height exceeds that of the window/scroll parent
+      var elementHeightExceedsWindowHeight = self._showHierarchy( function() {
 
-      // If the scroll parent is the document its height will always be higher than that of the
-      // list. Therefor we're going to use the window's height.
-      var scrollParentHeight = $scrollParent.is( document ) ?
-        self._getWindowHeight() : $scrollParent.height();
+        // Get the scroll parent
+        var $scrollParent = self._getScrollParent();
 
-      // Get the height of the listview and window
-      var elementHeightExceedsWindowHeight = $element.height() > scrollParentHeight;
+        // If the scroll parent is the document its height will always be higher than that of the
+        // list. Therefor we're going to use the window's height.
+        var scrollParentHeight = $scrollParent.is( document ) ?
+          self._getWindowHeight() : $scrollParent.height();
+
+        // Get the height of the listview and window
+        return $element.height() > scrollParentHeight;
+      } );
 
       // Only hide the progress element if no more items are going to be loaded
       // immediately after this
@@ -374,6 +380,49 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
       $scrollParent = $scrollParent.scrollParent();
     }
     return $scrollParent;
+  },
+
+  /**
+   * Shows the elements in the hierarchy of the element that are hidden using CSS display.
+   * @property {Function} callback The callback function that is executed while the hierarchy is
+   *   shown. The result of the callback is returned.
+   * @return {*} The result of the callback function.
+   * @private
+   */
+  _showHierarchy: function( callback ) {
+    var self = this,
+
+      /**
+       * The elements in the hierarchy that have been implicitly shown so that the height of the
+       * element can be correctly calculated
+       * @type {{element: JQuery, style: string}[]}
+       */
+      shown = [];
+
+    // Show every element in the hierarchy that is hidden
+    self.element.parentsUntil()
+      .each( function() {
+        var $this = $( this );
+
+        // Check if it is hidden
+        if ( $this.css( "display" ) === "none" ) {
+
+          // Store the element and its original style
+          shown.push( { element: $this, style: $this.attr( "style" ) } );
+
+          // Show the element
+          $this.show();
+        }
+      } );
+
+    var result = callback();
+
+    // Restore the style of the hierarchy elements that have been shown
+    shown.forEach( function( _hiddenItem ) {
+      _hiddenItem.element.attr( "style", _hiddenItem.style );
+    } );
+
+    return result;
   },
 
   /**
