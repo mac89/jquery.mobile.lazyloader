@@ -438,12 +438,15 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
       var items = [ { name: "John" }, { name: "Jane" } ];
       var itemsWithExistingItem = $.merge( [ existingItem ], items );
       var retrieved = 30;
+      var windowHeightBeforeLoad = 200,
+        windowHeightAfterLoad = 400;
 
       var provider = {
         // eslint-disable-next-line max-len
         "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to false": {
           retrieve: 3,
           listHeightAfterLoad: 300,
+          windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
           assertProgressIsVisible: false,
           assertAllDone: true,
           assertLoadIsCalledAgain: false,
@@ -456,6 +459,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         "Retrieved item nr less than requested item nr and list higher than window. Reset is set to false": {
           retrieve: 3,
           listHeightAfterLoad: 500,
+          windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
           assertProgressIsVisible: false,
           assertAllDone: true,
           assertLoadIsCalledAgain: false,
@@ -468,6 +472,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to false": {
           retrieve: 2,
           listHeightAfterLoad: 300,
+          windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
           assertProgressIsVisible: true,
           assertAllDone: false,
           assertLoadIsCalledAgain: true,
@@ -480,6 +485,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to false": {
           retrieve: 2,
           listHeightAfterLoad: 500,
+          windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
           assertProgressIsVisible: false,
           assertAllDone: false,
           assertLoadIsCalledAgain: false,
@@ -492,6 +498,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to true": {
           retrieve: 3,
           listHeightAfterLoad: 300,
+          windowHeights: [ windowHeightAfterLoad ],
           assertProgressIsVisible: false,
           assertAllDone: true,
           assertLoadIsCalledAgain: false,
@@ -504,6 +511,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         "Retrieved item nr less than requested item nr and list higher than window. Reset is set to true": {
           retrieve: 3,
           listHeightAfterLoad: 500,
+          windowHeights: [ windowHeightAfterLoad ],
           assertProgressIsVisible: false,
           assertAllDone: true,
           assertLoadIsCalledAgain: false,
@@ -516,6 +524,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to true": {
           retrieve: 2,
           listHeightAfterLoad: 300,
+          windowHeights: [ windowHeightAfterLoad ],
           assertProgressIsVisible: true,
           assertAllDone: false,
           assertLoadIsCalledAgain: true,
@@ -528,6 +537,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to true": {
           retrieve: 2,
           listHeightAfterLoad: 500,
+          windowHeights: [ windowHeightAfterLoad ],
           assertProgressIsVisible: false,
           assertAllDone: false,
           assertLoadIsCalledAgain: false,
@@ -546,10 +556,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
         QUnit.test(
           "_load: Test threshold is exceeded and the ajax request succeeds. " + test,
           function( assert ) {
-            var
-              listHeightBeforeLoad = 100,
-              windowHeightBeforeLoad = 200,
-              windowHeightAfterLoad = 400,
+            var listHeightBeforeLoad = 100,
               windowScrollTop = 50,
 
               url = "http://localhost:3000",
@@ -606,8 +613,10 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             data._loadTimeout = _loadTimeout;
 
             var getWindowHeightStub = this.sandbox.stub( data, "_getWindowHeight" );
-            getWindowHeightStub.onFirstCall().returns( windowHeightBeforeLoad );
-            getWindowHeightStub.onSecondCall().returns( windowHeightAfterLoad );
+
+            for ( var j = 0; j < testData.windowHeights.length; j++ ) {
+              getWindowHeightStub.onCall( j ).returns( testData.windowHeights[ j ] );
+            }
 
             data._load( 0, testData.reset );
 
