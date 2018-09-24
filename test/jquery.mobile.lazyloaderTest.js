@@ -106,10 +106,13 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
   QUnit.test( "reset", function( assert ) {
     var loadStub = this.sandbox.stub( $.mobile.lazyloader.prototype, "_load" );
+    var eventSpy = sinon.spy();
 
     var timeout = 100;
 
     this.$list.append( "<li></li>" );
+
+    this.$list.on( "lazyloaderreset", eventSpy );
 
     this.$list.lazyloader();
 
@@ -118,6 +121,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
     data.options.retrieved = 3;
 
     this.$list.lazyloader( "reset", timeout );
+
+    assert.ok( eventSpy.calledOnce );
 
     assert.ok( loadStub.calledTwice );
     assert.ok( loadStub.secondCall.calledWithExactly( timeout, true ) );
