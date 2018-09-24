@@ -240,6 +240,16 @@ $("#myListView").on("lazyloaderalldone", function ( evt ){ });
 
 - __evt__: {JQuery.Event} The jQuery event.
 
+#### lazyloaderreset
+
+Raised before a reset request is made.
+
+```JavaScript
+$("#myListView").on("lazyloaderreset", function ( evt ){ });
+```
+
+- __evt__: {JQuery.Event} The jQuery event.
+
 #### lazyloaderbeforerender
 
 Raised before the loaded items are rendered. This allows you to modify the data before it's rendered in the list.

@@ -150,6 +150,9 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     // Block it so no requests can be made by an event
     self._blockEventRequest = true;
 
+    // Trigger an event to announce that the lazyloader is resetting
+    self._trigger( "reset" );
+
     // Load the items
     self._load( timeout, true );
   },
