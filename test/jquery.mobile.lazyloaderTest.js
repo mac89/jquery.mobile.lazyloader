@@ -454,17 +454,21 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
   (
     function() {
-      var existingItem = { name: "Jill" };
-      var items = [ { name: "John" }, { name: "Jane" } ];
-      var itemsWithExistingItem = $.merge( [ existingItem ], items );
+      var duplicateItem = { name: "John" };
+      var newItem = { name: "Jane" };
+      var existingItems = [ { name: "Jill" }, duplicateItem ];
+      var items = [ duplicateItem, newItem ];
+      var itemsWithDuplicates = $.merge( $.merge( [], existingItems ), items );
+      var itemsWithoutDuplicates = $.merge( $.merge( [], existingItems ), [ newItem ] );
       var retrieved = 30;
       var windowHeightBeforeLoad = 200,
         windowHeightAfterLoad = 400;
 
       var provider = {
         // eslint-disable-next-line max-len
-        "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to false": {
+        "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to false. Duplicates are not to be removed.": {
           retrieve: 3,
+          removeDuplicates: false,
           listHeightAfterLoad: 300,
           windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
           assertProgressIsVisible: false,
@@ -472,12 +476,13 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: false,
           assertDoneLoading: true,
           reset: false,
-          expectedListItems: itemsWithExistingItem,
-          expectedRetrieved: retrieved
+          expectedListItems: itemsWithDuplicates,
+          expectedRetrieved: retrieved + items.length
         },
         // eslint-disable-next-line max-len
-        "Retrieved item nr less than requested item nr and list higher than window. Reset is set to false": {
+        "Retrieved item nr less than requested item nr and list higher than window. Reset is set to false. Duplicates are not to be removed.": {
           retrieve: 3,
+          removeDuplicates: false,
           listHeightAfterLoad: 500,
           windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
           assertProgressIsVisible: false,
@@ -485,12 +490,13 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: false,
           assertDoneLoading: true,
           reset: false,
-          expectedListItems: itemsWithExistingItem,
-          expectedRetrieved: retrieved
+          expectedListItems: itemsWithDuplicates,
+          expectedRetrieved: retrieved + items.length
         },
         // eslint-disable-next-line max-len
-        "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to false": {
+        "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to false. Duplicates are not to be removed.": {
           retrieve: 2,
+          removeDuplicates: false,
           listHeightAfterLoad: 300,
           windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
           assertProgressIsVisible: true,
@@ -498,12 +504,13 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: true,
           assertDoneLoading: false,
           reset: false,
-          expectedListItems: itemsWithExistingItem,
-          expectedRetrieved: retrieved
+          expectedListItems: itemsWithDuplicates,
+          expectedRetrieved: retrieved + items.length
         },
         // eslint-disable-next-line max-len
-        "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to false": {
+        "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to false. Duplicates are not to be removed.": {
           retrieve: 2,
+          removeDuplicates: false,
           listHeightAfterLoad: 500,
           windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
           assertProgressIsVisible: false,
@@ -511,12 +518,13 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertLoadIsCalledAgain: false,
           assertDoneLoading: true,
           reset: false,
-          expectedListItems: itemsWithExistingItem,
-          expectedRetrieved: retrieved
+          expectedListItems: itemsWithDuplicates,
+          expectedRetrieved: retrieved + items.length
         },
         // eslint-disable-next-line max-len
-        "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to true": {
+        "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to true. Duplicates are not to be removed.": {
           retrieve: 3,
+          removeDuplicates: false,
           listHeightAfterLoad: 300,
           windowHeights: [ windowHeightAfterLoad ],
           assertProgressIsVisible: false,
@@ -525,11 +533,12 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertDoneLoading: true,
           reset: true,
           expectedListItems: items,
-          expectedRetrieved: 0
+          expectedRetrieved: items.length
         },
         // eslint-disable-next-line max-len
-        "Retrieved item nr less than requested item nr and list higher than window. Reset is set to true": {
+        "Retrieved item nr less than requested item nr and list higher than window. Reset is set to true. Duplicates are not to be removed.": {
           retrieve: 3,
+          removeDuplicates: false,
           listHeightAfterLoad: 500,
           windowHeights: [ windowHeightAfterLoad ],
           assertProgressIsVisible: false,
@@ -538,11 +547,12 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertDoneLoading: true,
           reset: true,
           expectedListItems: items,
-          expectedRetrieved: 0
+          expectedRetrieved: items.length
         },
         // eslint-disable-next-line max-len
-        "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to true": {
+        "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to true. Duplicates are not to be removed.": {
           retrieve: 2,
+          removeDuplicates: false,
           listHeightAfterLoad: 300,
           windowHeights: [ windowHeightAfterLoad ],
           assertProgressIsVisible: true,
@@ -551,11 +561,12 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertDoneLoading: false,
           reset: true,
           expectedListItems: items,
-          expectedRetrieved: 0
+          expectedRetrieved: items.length
         },
         // eslint-disable-next-line max-len
-        "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to true": {
+        "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to true. Duplicates are not to be removed.": {
           retrieve: 2,
+          removeDuplicates: false,
           listHeightAfterLoad: 500,
           windowHeights: [ windowHeightAfterLoad ],
           assertProgressIsVisible: false,
@@ -564,7 +575,119 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           assertDoneLoading: true,
           reset: true,
           expectedListItems: items,
-          expectedRetrieved: 0
+          expectedRetrieved: items.length
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to false. Duplicates are to be removed.": {
+          retrieve: 3,
+          removeDuplicates: true,
+          listHeightAfterLoad: 300,
+          windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
+          assertProgressIsVisible: false,
+          assertAllDone: true,
+          assertLoadIsCalledAgain: false,
+          assertDoneLoading: true,
+          reset: false,
+          expectedListItems: itemsWithoutDuplicates,
+          expectedRetrieved: retrieved + 1
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr less than requested item nr and list higher than window. Reset is set to false. Duplicates are to be removed.": {
+          retrieve: 3,
+          removeDuplicates: true,
+          listHeightAfterLoad: 500,
+          windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
+          assertProgressIsVisible: false,
+          assertAllDone: true,
+          assertLoadIsCalledAgain: false,
+          assertDoneLoading: true,
+          reset: false,
+          expectedListItems: itemsWithoutDuplicates,
+          expectedRetrieved: retrieved + 1
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to false. Duplicates are to be removed.": {
+          retrieve: 2,
+          removeDuplicates: true,
+          listHeightAfterLoad: 300,
+          windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
+          assertProgressIsVisible: true,
+          assertAllDone: false,
+          assertLoadIsCalledAgain: true,
+          assertDoneLoading: false,
+          reset: false,
+          expectedListItems: itemsWithoutDuplicates,
+          expectedRetrieved: retrieved + 1
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to false. Duplicates are to be removed.": {
+          retrieve: 2,
+          removeDuplicates: true,
+          listHeightAfterLoad: 500,
+          windowHeights: [ windowHeightBeforeLoad, windowHeightAfterLoad ],
+          assertProgressIsVisible: false,
+          assertAllDone: false,
+          assertLoadIsCalledAgain: false,
+          assertDoneLoading: true,
+          reset: false,
+          expectedListItems: itemsWithoutDuplicates,
+          expectedRetrieved: retrieved + 1
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr less than requested item nr and list smaller than window. Reset is set to true. Duplicates are to be removed.": {
+          retrieve: 3,
+          removeDuplicates: true,
+          listHeightAfterLoad: 300,
+          windowHeights: [ windowHeightAfterLoad ],
+          assertProgressIsVisible: false,
+          assertAllDone: true,
+          assertLoadIsCalledAgain: false,
+          assertDoneLoading: true,
+          reset: true,
+          expectedListItems: items,
+          expectedRetrieved: items.length
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr less than requested item nr and list higher than window. Reset is set to true. Duplicates are to be removed.": {
+          retrieve: 3,
+          removeDuplicates: true,
+          listHeightAfterLoad: 500,
+          windowHeights: [ windowHeightAfterLoad ],
+          assertProgressIsVisible: false,
+          assertAllDone: true,
+          assertLoadIsCalledAgain: false,
+          assertDoneLoading: true,
+          reset: true,
+          expectedListItems: items,
+          expectedRetrieved: items.length
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr equal to requested item nr and list smaller than window. Reset is set to true. Duplicates are to be removed.": {
+          retrieve: 2,
+          removeDuplicates: true,
+          listHeightAfterLoad: 300,
+          windowHeights: [ windowHeightAfterLoad ],
+          assertProgressIsVisible: true,
+          assertAllDone: false,
+          assertLoadIsCalledAgain: true,
+          assertDoneLoading: false,
+          reset: true,
+          expectedListItems: items,
+          expectedRetrieved: items.length
+        },
+        // eslint-disable-next-line max-len
+        "Retrieved item nr equal to requested item nr and list higher than window. Reset is set to true. Duplicates are to be removed.": {
+          retrieve: 2,
+          removeDuplicates: true,
+          listHeightAfterLoad: 500,
+          windowHeights: [ windowHeightAfterLoad ],
+          assertProgressIsVisible: false,
+          assertAllDone: false,
+          assertLoadIsCalledAgain: false,
+          assertDoneLoading: true,
+          reset: true,
+          expectedListItems: items,
+          expectedRetrieved: items.length
         }
       };
 
@@ -578,7 +701,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
           function( assert ) {
             var listHeightBeforeLoad = 100,
               windowScrollTop = 50,
-
+              self = this,
               url = "http://localhost:3000",
               templateId = "user",
               $progress = this.$progress,
@@ -595,8 +718,10 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
             var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
-            this.$list.append( "<li>" + existingItem.name + "</li>" )
-              .height( listHeightBeforeLoad );
+            existingItems.forEach( function( value ) {
+              self.$list.append( "<li>" + value.name + "</li>" )
+                .height( listHeightBeforeLoad );
+            } );
 
             this.sandbox.stub( $.prototype, "scrollTop" ).returns( windowScrollTop );
 
@@ -610,7 +735,8 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
               postData: postData,
               threshold: threshold,
               ajaxType: ajaxType,
-              ajaxSettings: ajaxSettings
+              ajaxSettings: ajaxSettings,
+              removeDuplicates: testData.removeDuplicates
             };
 
             this.$progress.hide();
@@ -677,7 +803,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
               assert.equal( $( $listItems.get( i ) ).html(), testData.expectedListItems[ i ].name );
             }
 
-            assert.equal( data.options.retrieved, testData.expectedRetrieved + items.length );
+            assert.equal( data.options.retrieved, testData.expectedRetrieved );
             assert.equal( doneloadingSpy.calledOnce, testData.assertDoneLoading );
             assert.ok( beforerenderSpy.calledWithExactly( sinon.match.object, items ) );
 

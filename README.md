@@ -173,6 +173,12 @@ The server response is expected to be in a JSON format with the mandatory `items
 		<td>The search query that is posted along in the request. Changing this option will trigger the `reset` function.</td>
 	</tr>
 	<tr>
+		<td>removeDuplicates</td>
+		<td>true</td>
+		<td>No</td>
+		<td>Removes new duplicate items loaded by a load more request. Items within a request are not compared to one another.</td>
+	</tr>
+	<tr>
 		<td>ajaxSettings</td>
 		<td>{<br>
 			type: "POST"

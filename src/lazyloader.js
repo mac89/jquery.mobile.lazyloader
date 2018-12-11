@@ -85,7 +85,13 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
      */
     ajaxSettings: {
       type: "POST"
-    }
+    },
+
+    /**
+     * Indicates duplicate items need to be removed.
+     * @type {boolean}
+     */
+    removeDuplicates: true
   },
 
   /**
@@ -289,81 +295,154 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
     // Check if the items property is an array
     if ( Array.isArray( items ) ) {
-      var count = items.length,
-        html = [],
-
-        // Check if we're done loading
-        done = count < options.retrieve;
-
-      // Update the number of retrieved items
-      options.retrieved += count;
-
-      // Get the ich templates
-      ich.grabTemplates();
+      var count = items.length;
 
       // Trigger event to allow for manipulation of the loaded items before rendering
       // takes place
       this._trigger( "beforerender", {}, [ items ] );
 
       // Render items
-      items.forEach( function( item ) {
+      self._renderItems( items );
 
-        // Create html for the item using the template
-        html.push( ich[ options.templateId ]( item ) );
-      } );
-
-      // Add the list items html to the list
-      $element.append( html );
-
-      // Refresh the listview so it is re-enhanced by JQM
-      self.refresh();
-
-      // Check if the element's height exceeds that of the window/scroll parent
-      var elementHeightExceedsWindowHeight = self._showHierarchy( function() {
-
-        // Get the scroll parent
-        var $scrollParent = self._getScrollParent();
-
-        // If the scroll parent is the document its height will always be higher than that of the
-        // list. Therefor we're going to use the window's height.
-        var scrollParentHeight = $scrollParent.is( document ) ?
-          self._getWindowHeight() : $scrollParent.height();
-
-        // Get the height of the listview and window
-        return $element.height() > scrollParentHeight;
-      } );
-
-      // Only hide the progress element if no more items are going to be loaded
-      // immediately after this
-      if ( elementHeightExceedsWindowHeight || done ) {
-
-        // Hide the progress element
-        $( options.$progress ).hide();
-      }
-
-      // Indicate whether or not all items have been loaded
-      self._done = done;
-
-      if ( done ) {
-
-        // Trigger an event to announce that the lazyloader is done loading
-        self._trigger( doneLoadingEvent );
-
-        // Trigger an event to announce that the lazyloader is done loading entirely
-        self._trigger( allDoneEvent );
-      } else if ( !elementHeightExceedsWindowHeight ) {
-
-        // No scrolling is possible yet, so load some more right away
-        self._load();
-      } else {
-
-        // Trigger an event to announce that the lazyloader is done loading
-        self._trigger( doneLoadingEvent );
-      }
+      // Finish the load more operation.
+      self._finish( count );
     } else {
 
       // Trigger an event to announce that an error occurred during parsing
       self._handleError( parseResultErrorCode, data );
+    }
+  },
+
+  /**
+   * Renders the provide items.
+   * @param {Object[]} items The items to render.
+   * @private
+   */
+  _renderItems: function( items ) {
+    var self = this,
+      options = self.options,
+      $element = self.element,
+      html = [],
+      $children = $element.children();
+
+    // Get the ich templates
+    ich.grabTemplates();
+
+    // Render items
+    items.forEach( function( item ) {
+
+      // Create html for the item using the template
+      html.push( ich[ options.templateId ]( item ) );
+    } );
+
+    // Add the list items html to the list
+    $element.append( html );
+
+    if ( options.removeDuplicates ) {
+
+      // Refresh the listview so it is re-enhanced by JQM and an accurate comparison can be made
+      // between items
+      self.refresh();
+
+      // Check if any of the new items already exist within the list
+      $children.each( function() {
+
+        // Check if there any items left
+        if ( html.length === 0 ) {
+
+          // Exit the loop as there's nothing left to compare with
+          return false;
+        }
+
+        var $child = $( this ), classesToRemove = "ui-first-child ui-last-child";
+        html.some( function( $value, index ) {
+
+          // Check if the HTML matches
+          if ( $value.clone().removeClass( classesToRemove ).prop( "outerHTML" ) ===
+            $child.clone().removeClass( classesToRemove ).prop( "outerHTML" ) ) {
+
+            // Remove from the array
+            html.splice( index, 1 );
+
+            // Remove element
+            $value.remove();
+
+            // Exit
+            return true;
+          } else {
+            return false;
+          }
+        } );
+      } );
+    }
+
+    // Refresh the listview so it is re-enhanced by JQM
+    self.refresh();
+
+    // Update the number of retrieved items with the number of actually added items
+    options.retrieved += html.length;
+  },
+
+  /**
+   * Finishes the load more operation.
+   * If the number of retrieved items is lower than the requested number of items the lazy loader
+   * considers itself to be done.
+   *
+   * If the number of retrieved items is equal or higher one of two things can happen. Either the
+   * list fills its scroll parent and only an event is emitted or the list does not fill its scroll
+   * parent and another request is sent out.
+   *
+   * @param {number} numberRetrieved The number of newly retrieved items.
+   * @private
+   */
+  _finish: function( numberRetrieved ) {
+    var self = this,
+      options = self.options,
+
+      // Check if we're done loading
+      done = numberRetrieved < options.retrieve;
+
+    // Check if the element's height exceeds that of the window/scroll parent
+    var elementHeightExceedsWindowHeight = self._showHierarchy( function() {
+
+      // Get the scroll parent
+      var $scrollParent = self._getScrollParent();
+
+      // If the scroll parent is the document its height will always be higher than that of the
+      // list. Therefor we're going to use the window's height.
+      var scrollParentHeight = $scrollParent.is( document ) ?
+        self._getWindowHeight() : $scrollParent.height();
+
+      // Get the height of the listview and window
+      return self.element.height() > scrollParentHeight;
+    } );
+
+    // Only hide the progress element if no more items are going to be loaded
+    // immediately after this
+    if ( elementHeightExceedsWindowHeight || done ) {
+
+      // Hide the progress element
+      $( options.$progress ).hide();
+    }
+
+    // Indicate whether or not all items have been loaded
+    self._done = done;
+
+    if ( done ) {
+
+      // Trigger an event to announce that the lazyloader is done loading
+      self._trigger( doneLoadingEvent );
+
+      // Trigger an event to announce that the lazyloader is done loading entirely
+      self._trigger( allDoneEvent );
+    } else if ( !elementHeightExceedsWindowHeight ) {
+
+      // No scrolling is possible yet, so load some more right away
+      self._load();
+    } else {
+
+      // Trigger an event to announce that the lazyloader is done loading
+      self._trigger( doneLoadingEvent );
     }
   },
 

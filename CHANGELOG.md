@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2018-11-12
+### Added
+- \#27: Added a `removeDuplicates` option which if set to `true` removes new duplicate items when they are loaded.
+
 ## [2.3.0] - 2018-09-24
 ### Added
 - \#25: Added a `lazyloaderreset` event. This event is triggered before a reset request is made.
