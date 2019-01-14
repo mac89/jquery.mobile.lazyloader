@@ -16,6 +16,7 @@
     "bluebird": "^3.5.1",
     "eslint": "^4.16.0",
     "eslint-config-jquery": "^1.0.1",
+    "file-url": "^2.0.2",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-concat": "^1.0.1",
@@ -25,6 +26,7 @@
     "grunt-karma-coveralls": "^2.5.4",
     "grunt-watcher": "^1.0.0",
     "grunt-wrap": "^0.3.1",
+    "husky": "^1.3.1",
     "karma": "^1.7.1",
     "karma-coverage": "^1.1.1",
     "karma-junit-reporter": "^1.2.0",
@@ -32,8 +34,15 @@
     "karma-qunit": "^1.2.1",
     "karma-sinon": "^1.0.5",
     "load-grunt-tasks": "^3.5.2",
+    "npm-run-all": "^4.1.5",
+    "opn": "^5.4.0",
     "qunit": "^2.5.0",
     "qunitjs": "^2.4.1",
     "sinon": "^4.2.1"
+  },
+  "scripts": {
+    "start": "node samples\\server\\server.js",
+    "test": "grunt karma",
+    "lint": "grunt eslint"
   }
 }

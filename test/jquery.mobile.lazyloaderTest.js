@@ -777,7 +777,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             this.$list.height( testData.listHeightAfterLoad );// Get first ajax call
             var call = $.ajax.getCall( 0 ).returnValue;
 
-            var responseData = { items: items };
+            var responseData = { items: items, count: items.length };
 
             // To return successful ajax call (having used .resolve() )
             call.resolve( responseData );
@@ -804,8 +804,11 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
             }
 
             assert.equal( data.options.retrieved, testData.expectedRetrieved );
-            assert.equal( doneloadingSpy.calledOnce, testData.assertDoneLoading );
-            assert.ok( beforerenderSpy.calledWithExactly( sinon.match.object, items ) );
+            assert.equal(
+              doneloadingSpy.calledWithExactly( sinon.match.object, items, responseData ),
+              testData.assertDoneLoading );
+            assert.ok(
+              beforerenderSpy.calledWithExactly( sinon.match.object, items, responseData ) );
 
             assert.equal(
               this.$progress.is( ":visible" ), testData.assertProgressIsVisible );

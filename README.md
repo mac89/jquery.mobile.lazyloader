@@ -231,10 +231,14 @@ The lazyloader triggers several events during certain operations. Here are examp
 Raised when a request for more items is completed.
 
 ```JavaScript
-$("#myListView").on("lazyloaderdoneloading", function ( evt ){ });
+$("#myListView").on("lazyloaderdoneloading", function ( evt, items, data ){ });
 ```
 
 - __evt__: {JQuery.Event} The jQuery event.
+
+- __items__: {Object[]} An array of loaded items.
+
+- __data__: {Object} The complete JSON data returned in the response.
 
 #### lazyloaderalldone
 
@@ -261,12 +265,14 @@ $("#myListView").on("lazyloaderreset", function ( evt ){ });
 Raised before the loaded items are rendered. This allows you to modify the data before it's rendered in the list.
 
 ```JavaScript
-$("#myListView").on("lazyloaderbeforerender", function ( evt, items ){ });
+$("#myListView").on("lazyloaderbeforerender", function ( evt, items, data ){ });
 ```
 
 - __evt__: {JQuery.Event} The jQuery event.
 
 - __items__: {Object[]} An array of loaded items.
+
+- __data__: {Object} The complete JSON data returned in the response.
 
 #### lazyloadererror
 
@@ -290,8 +296,6 @@ $("#myListView").on("lazyloadererror", function ( evt, error ){ });
 	
 ### Sample
 
-Navigate to the `jquery.mobile.lazyloader` directory and run the following command in a console to start the server:
+Navigate to the `jquery.mobile.lazyloader` directory and run the following command in a console to start the server and open the sample page:
 
-`node samples\server\server.js`
-
-Open the `samples\sample.html` page in your browser of choice.
+`npm start`
