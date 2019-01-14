@@ -5,13 +5,16 @@ $( function() {
       templateId: "user",
       $progress: "#myProgress"
     }
-  ).on( "lazyloaderdoneloading", function() {
+  ).on( "lazyloaderdoneloading", function( e, items, data ) {
     console.log( "Loaded more items" );
+    console.log( items );
+    console.log( data );
   } ).on( "lazyloaderalldone", function() {
     console.log( "All items are loaded" );
-  } ).on( "lazyloaderbeforerender", function( e, items ) {
+  } ).on( "lazyloaderbeforerender", function( e, items, data ) {
     console.log( "Items to be rendered" );
     console.log( items );
+    console.log( data );
 
     // Manipulate items before they are rendered
     items.forEach( function( item ) {

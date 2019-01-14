@@ -398,17 +398,16 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
 
     // Check if the items property is an array
     if ( Array.isArray( items ) ) {
-      var count = items.length;
 
       // Trigger event to allow for manipulation of the loaded items before rendering
       // takes place
-      this._trigger( "beforerender", {}, [ items ] );
+      this._trigger( "beforerender", {}, [ items, data ] );
 
       // Render items
       self._renderItems( items );
 
       // Finish the load more operation.
-      self._finish( count );
+      self._finish( items, data );
     } else {
 
       // Trigger an event to announce that an error occurred during parsing
@@ -495,15 +494,17 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
    * list fills its scroll parent and only an event is emitted or the list does not fill its scroll
    * parent and another request is sent out.
    *
-   * @param {number} numberRetrieved The number of newly retrieved items.
+   * @param {Object[]} items The items that have been retrieved.
+   * @param {Object} data The complete data returned by the request.
+   *
    * @private
    */
-  _finish: function( numberRetrieved ) {
+  _finish: function( items, data ) {
     var self = this,
       options = self.options,
 
       // Check if we're done loading
-      done = numberRetrieved < options.retrieve;
+      done = items.length < options.retrieve;
 
     // Check if the element's height exceeds that of the window/scroll parent
     var elementHeightExceedsWindowHeight = self._showHierarchy( function() {
@@ -534,7 +535,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     if ( done ) {
 
       // Trigger an event to announce that the lazyloader is done loading
-      self._trigger( doneLoadingEvent );
+      self._trigger( doneLoadingEvent, {}, [ items, data ] );
 
       // Trigger an event to announce that the lazyloader is done loading entirely
       self._trigger( allDoneEvent );
@@ -545,7 +546,7 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
     } else {
 
       // Trigger an event to announce that the lazyloader is done loading
-      self._trigger( doneLoadingEvent );
+      self._trigger( doneLoadingEvent, {}, [ items, data ] );
     }
   },
 
