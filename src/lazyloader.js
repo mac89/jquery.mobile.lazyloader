@@ -205,8 +205,8 @@ $.widget( "mobile." + widgetName, $.mobile.listview, {
           // Indicate a request can be made by an event handler again
           self._blockEventRequest = false;
 
-          // Trigger an event to announce that the lazyloader is done loading
-          self._trigger( doneLoadingEvent );
+          // Trigger an event to announce that the lazyloader has skipped loading
+          self._trigger( skipLoadingEvent );
         }
 
       }, timeout );

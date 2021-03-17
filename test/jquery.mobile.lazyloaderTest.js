@@ -160,14 +160,14 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     var _loadStub = sinon.stub( $.mobile.lazyloader.prototype, "_load" );
 
-    var doneloadingSpy = sinon.spy();
+    var skiploadingSpy = sinon.spy();
 
     this.$scrollContainer.hide();
     var originalContainerStyle = this.$scrollContainer.attr( "style" );
 
     this.$list.height( listHeight );
     this.$list.lazyloader( { threshold: threshold } )
-      .on( "lazyloaderdoneloading", doneloadingSpy );
+      .on( "lazyloaderskiploading", skiploadingSpy );
 
     _loadStub.restore();
 
@@ -185,7 +185,7 @@ QUnit.module( "jquery.mobile.lazyloader Test", {
 
     assert.ok( this.clearTimeoutStub.calledWithExactly( _loadTimeout ) );
     assert.ok( this.ajaxStub.notCalled );
-    assert.ok( doneloadingSpy.calledOnce );
+    assert.ok( skiploadingSpy.calledOnce );
     assert.notOk( data._blockEventRequest );
     assert.equal( this.$scrollContainer.attr( "style" ), originalContainerStyle );
   } );
