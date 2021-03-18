@@ -1,6 +1,6 @@
 {
   "name": "jquery.mobile.lazyloader",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "dependencies": {
     "jquery": "^2.2.4",
     "jquery-mobile": "^1.4.0",
