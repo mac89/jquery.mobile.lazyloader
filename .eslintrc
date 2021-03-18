@@ -15,6 +15,7 @@
     "errorEvent": true,
     "allDoneEvent": true,
     "doneLoadingEvent": true,
+    "skipLoadingEvent": true,
     "loadTriggerEvents": true,
     "requestErrorCode": true,
     "parseResultErrorCode": true

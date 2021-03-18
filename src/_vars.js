@@ -37,6 +37,12 @@ var $window = $( window ),
   doneLoadingEvent = "doneloading",
 
   /**
+   * The event that is triggered after skipping of a load action.
+   * @type {string}
+   */
+  skipLoadingEvent = "skiploading",
+
+  /**
    * The events on which to possibly load more items.
    * @type {string}
    */

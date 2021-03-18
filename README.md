@@ -240,6 +240,16 @@ $("#myListView").on("lazyloaderdoneloading", function ( evt, items, data ){ });
 
 - __data__: {Object} The complete JSON data returned in the response.
 
+#### lazyloaderskiploading
+
+Raised when loading of items is skipped.
+
+```JavaScript
+$("#myListView").on("lazyloaderskiploading", function ( evt ){ });
+```
+
+- __evt__: {JQuery.Event} The jQuery event.
+
 #### lazyloaderalldone
 
 Raised when all items have been loaded. No more requests will be sent after this event has been raised.
